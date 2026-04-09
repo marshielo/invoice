@@ -8,6 +8,7 @@ import { errorHandler } from '~/middleware/error.middleware'
 import { apiRateLimit } from '~/middleware/rate-limit.middleware'
 import { authRoutes } from '~/routes/auth.routes'
 import { healthRoutes } from '~/routes/health.routes'
+import { uploadRoutes } from '~/routes/upload.routes'
 import type { AppEnv } from '~/types/context'
 
 const app = new Hono<AppEnv>()
@@ -50,6 +51,7 @@ app.use('/api/*', apiRateLimit)
 // ---------- Routes ----------
 app.route('/', healthRoutes)
 app.route('/auth', authRoutes)
+app.route('/api/v1/upload', uploadRoutes)
 
 // Future routes (wired up as epics complete):
 // app.route('/api/v1/tenants', tenantRoutes)
