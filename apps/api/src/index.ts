@@ -50,7 +50,7 @@ app.use('/api/*', apiRateLimit)
 
 // ---------- Routes ----------
 app.route('/', healthRoutes)
-app.route('/auth', authRoutes)
+app.route('/api/v1/auth', authRoutes)
 app.route('/api/v1/upload', uploadRoutes)
 
 // Future routes (wired up as epics complete):
