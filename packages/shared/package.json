@@ -11,6 +11,7 @@
     "./schemas": "./src/schemas/index.ts"
   },
   "scripts": {
+    "build": "tsc --noEmit",
     "lint": "eslint src/",
     "type-check": "tsc --noEmit",
     "test": "vitest run",

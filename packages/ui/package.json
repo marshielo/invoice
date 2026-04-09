@@ -8,6 +8,7 @@
     "./*": "./src/components/*.tsx"
   },
   "scripts": {
+    "build": "tsc --noEmit",
     "lint": "eslint src/",
     "type-check": "tsc --noEmit"
   },
