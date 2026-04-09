@@ -1,5 +1,5 @@
 import { boolean, pgEnum, pgTable, timestamp, uuid, varchar } from 'drizzle-orm/pg-core'
-import { tenants } from './tenants.ts'
+import { tenants } from './tenants'
 
 export const userRoleEnum = pgEnum('user_role', ['owner', 'admin', 'staff', 'viewer'])
 

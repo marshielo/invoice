@@ -6,7 +6,13 @@ if (!connectionString) {
 }
 
 export default defineConfig({
-  schema: './src/schema/*.ts',
+  // List schema files directly — drizzle-kit uses CJS require() which can't
+  // resolve bundler-style .js → .ts aliases used in barrel index.ts.
+  // Add new schema files here as they are created.
+  schema: [
+    './src/schema/tenants.ts',
+    './src/schema/users.ts',
+  ],
   out: './drizzle',
   dialect: 'postgresql',
   dbCredentials: {

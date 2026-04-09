@@ -1,6 +1,6 @@
 import { relations as drizzleRelations } from 'drizzle-orm'
-import { tenantBankAccounts, tenantQris, tenants } from './schema/tenants.ts'
-import { users } from './schema/users.ts'
+import { tenantBankAccounts, tenantQris, tenants } from './schema/tenants'
+import { users } from './schema/users'
 
 export const tenantsRelations = drizzleRelations(tenants, ({ many }) => ({
   users: many(users),
