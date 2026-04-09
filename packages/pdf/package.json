@@ -1,0 +1,23 @@
+{
+  "name": "@invoicein/pdf",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "lint": "eslint src/",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@invoicein/shared": "workspace:*",
+    "@react-pdf/renderer": "^4.3.0",
+    "react": "^19.1.0"
+  },
+  "devDependencies": {
+    "@invoicein/tsconfig": "workspace:*",
+    "@types/react": "^19.1.0",
+    "typescript": "^5.8.3"
+  }
+}

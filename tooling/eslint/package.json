@@ -1,0 +1,21 @@
+{
+  "name": "@invoicein/eslint-config",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "files": ["*.js"],
+  "exports": {
+    "./base": "./base.js",
+    "./nextjs": "./nextjs.js",
+    "./react-internal": "./react-internal.js"
+  },
+  "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.29.0",
+    "@typescript-eslint/parser": "^8.29.0",
+    "eslint-plugin-import": "^2.31.0"
+  },
+  "peerDependencies": {
+    "eslint": "^9.0.0",
+    "typescript": "^5.0.0"
+  }
+}

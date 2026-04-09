@@ -1,0 +1,10 @@
+{
+  "extends": "@invoicein/tsconfig/cloudflare-worker.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["./src/*"]
+    }
+  },
+  "include": ["src", "wrangler.toml"]
+}

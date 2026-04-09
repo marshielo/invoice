@@ -1,0 +1,28 @@
+{
+  "name": "@invoicein/shared",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./enums": "./src/enums/index.ts",
+    "./constants": "./src/constants/index.ts",
+    "./utils": "./src/utils/index.ts",
+    "./schemas": "./src/schemas/index.ts"
+  },
+  "scripts": {
+    "lint": "eslint src/",
+    "type-check": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@invoicein/tsconfig": "workspace:*",
+    "@invoicein/eslint-config": "workspace:*",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.1"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "name": "@invoicein/api",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "build": "wrangler deploy --dry-run",
+    "deploy": "wrangler deploy",
+    "lint": "eslint src/",
+    "type-check": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.40.0",
+    "@hono/zod-openapi": "^0.18.4",
+    "@hono/zod-validator": "^0.4.3",
+    "@invoicein/ai": "workspace:*",
+    "@invoicein/db": "workspace:*",
+    "@invoicein/email": "workspace:*",
+    "@invoicein/pdf": "workspace:*",
+    "@invoicein/shared": "workspace:*",
+    "@supabase/supabase-js": "^2.49.4",
+    "drizzle-orm": "^0.41.0",
+    "hono": "^4.7.7",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250409.0",
+    "@invoicein/tsconfig": "workspace:*",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.1",
+    "wrangler": "^4.11.0"
+  }
+}

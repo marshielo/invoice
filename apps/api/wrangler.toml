@@ -1,0 +1,40 @@
+name = "invoicein-api"
+main = "src/index.ts"
+compatibility_date = "2025-04-01"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+ENVIRONMENT = "development"
+
+# R2 Buckets
+[[r2_buckets]]
+binding = "R2_STORAGE"
+bucket_name = "invoicein-storage"
+preview_bucket_name = "invoicein-storage-dev"
+
+# Cloudflare Queues
+[[queues.producers]]
+binding = "QUEUE_NOTIFICATIONS"
+queue = "invoicein-notifications"
+
+[[queues.producers]]
+binding = "QUEUE_PDF"
+queue = "invoicein-pdf"
+
+[[queues.consumers]]
+queue = "invoicein-notifications"
+max_batch_size = 10
+max_batch_timeout = 5
+
+[[queues.consumers]]
+queue = "invoicein-pdf"
+max_batch_size = 5
+max_batch_timeout = 10
+
+# Cron Triggers (overdue detection + recurring invoice generation)
+[triggers]
+crons = ["0 1 * * *", "0 2 * * *"]
+
+[dev]
+port = 8787
+local_protocol = "http"
