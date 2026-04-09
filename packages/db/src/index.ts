@@ -1,3 +1,3 @@
-export * from './schema/index.js'
-export * from './client.js'
-export * from './relations.js'
+export * from './schema/index.ts'
+export * from './client.ts'
+export * from './relations.ts'

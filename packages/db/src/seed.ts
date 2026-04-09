@@ -4,7 +4,7 @@
  *
  * Creates a sample tenant + owner user for local development.
  */
-import { createDb } from './client.js'
+import { createDb } from './client.ts'
 
 const DATABASE_URL = process.env['DATABASE_URL']
 if (!DATABASE_URL) throw new Error('DATABASE_URL is required')
