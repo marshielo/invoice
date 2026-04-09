@@ -1,2 +1,2 @@
-// DB schemas — populated in MAR-84 (E1-002: Database Package)
-export {}
+export * from './tenants.js'
+export * from './users.js'

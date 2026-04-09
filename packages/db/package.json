@@ -24,8 +24,9 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
-    "@invoicein/tsconfig": "workspace:*",
     "@invoicein/eslint-config": "workspace:*",
+    "@invoicein/tsconfig": "workspace:*",
+    "@types/node": "^22.14.1",
     "drizzle-kit": "^0.30.4",
     "tsx": "^4.19.3",
     "typescript": "^5.8.3"
