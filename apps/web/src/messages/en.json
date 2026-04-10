@@ -159,5 +159,92 @@
       "title": "Transparent Pricing",
       "subtitle": "Start free, upgrade anytime"
     }
+  },
+  "onboarding": {
+    "title": "Welcome to Invoicein!",
+    "subtitle": "Let's set up your business in a few easy steps",
+    "stepCount": "Step {current} of {total}",
+    "steps": {
+      "businessInfo": "Business Info",
+      "bankAccount": "Bank Account",
+      "logo": "Logo",
+      "invoicePrefs": "Invoice Prefs"
+    },
+    "businessInfo": {
+      "title": "Business Information",
+      "subtitle": "Tell us a bit about your business",
+      "businessName": "Business Name",
+      "businessNamePlaceholder": "Acme Corp",
+      "slug": "Business URL",
+      "slugPrefix": "invoicein.app/i/",
+      "slugHint": "Used in your public invoice links",
+      "businessType": "Business Type",
+      "businessTypes": {
+        "individual": "Individual / Freelance",
+        "cv": "CV (Partnership)",
+        "pt": "PT (Limited Liability)",
+        "ud": "UD (Sole Proprietorship)",
+        "other": "Other"
+      },
+      "email": "Business Email",
+      "emailPlaceholder": "contact@yourbusiness.com",
+      "phone": "Phone Number",
+      "phonePlaceholder": "08xxxxxxxxxx",
+      "phoneHint": "Optional",
+      "continue": "Continue"
+    },
+    "bankAccount": {
+      "title": "Add a Bank Account",
+      "subtitle": "This account will appear on your invoices for payment",
+      "bank": "Bank Name",
+      "selectBank": "Select a bank...",
+      "accountNumber": "Account Number",
+      "accountNumberPlaceholder": "1234567890",
+      "accountHolderName": "Account Holder Name",
+      "accountHolderPlaceholder": "John Doe",
+      "continue": "Continue",
+      "skip": "Skip for now"
+    },
+    "logo": {
+      "title": "Business Logo",
+      "subtitle": "Your logo will appear at the top of your invoices",
+      "dropzone": "Drag & drop an image here, or click to select",
+      "hint": "JPG, PNG, or WebP. Max 2MB.",
+      "uploading": "Uploading...",
+      "changeFile": "Change image",
+      "continue": "Continue",
+      "skip": "Skip for now"
+    },
+    "invoicePrefs": {
+      "title": "Invoice Preferences",
+      "subtitle": "Customize your invoice numbering and payment terms",
+      "prefix": "Invoice Number Prefix",
+      "prefixPlaceholder": "INV",
+      "format": "Invoice Number Format",
+      "paymentTerms": "Default Payment Terms",
+      "notes": "Default Notes",
+      "notesPlaceholder": "Thank you for your business...",
+      "notesHint": "Optional — displayed at the bottom of invoices",
+      "finish": "Finish — Go to Dashboard",
+      "skip": "Skip for now"
+    },
+    "errors": {
+      "businessNameRequired": "Business name is required",
+      "slugRequired": "Business URL is required",
+      "slugInvalid": "Only lowercase letters, numbers, and hyphens (-)",
+      "slugTooShort": "Minimum 3 characters",
+      "businessTypeRequired": "Business type is required",
+      "emailRequired": "Business email is required",
+      "emailInvalid": "Invalid email format",
+      "bankRequired": "Please select a bank",
+      "accountNumberRequired": "Account number is required",
+      "accountHolderRequired": "Account holder name is required",
+      "prefixRequired": "Prefix is required",
+      "createTenantFailed": "Failed to create business profile. Please try again.",
+      "slugTaken": "This business URL is already taken, try another.",
+      "bankAccountFailed": "Failed to save bank account.",
+      "logoFailed": "Failed to upload logo.",
+      "invoicePrefsFailed": "Failed to save invoice preferences."
+    }
   }
 }

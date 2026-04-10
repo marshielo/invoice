@@ -159,5 +159,92 @@
       "title": "Harga Transparan",
       "subtitle": "Mulai gratis, upgrade kapan saja"
     }
+  },
+  "onboarding": {
+    "title": "Selamat Datang di Invoicein!",
+    "subtitle": "Mari siapkan bisnis Anda dalam beberapa langkah mudah",
+    "stepCount": "Langkah {current} dari {total}",
+    "steps": {
+      "businessInfo": "Info Bisnis",
+      "bankAccount": "Rekening Bank",
+      "logo": "Logo",
+      "invoicePrefs": "Preferensi Faktur"
+    },
+    "businessInfo": {
+      "title": "Informasi Bisnis",
+      "subtitle": "Ceritakan sedikit tentang bisnis Anda",
+      "businessName": "Nama Bisnis",
+      "businessNamePlaceholder": "Toko Maju Jaya",
+      "slug": "URL Bisnis",
+      "slugPrefix": "invoicein.app/i/",
+      "slugHint": "Digunakan pada link faktur publik Anda",
+      "businessType": "Jenis Usaha",
+      "businessTypes": {
+        "individual": "Individu / Freelance",
+        "cv": "CV (Persekutuan Komanditer)",
+        "pt": "PT (Perseroan Terbatas)",
+        "ud": "UD (Usaha Dagang)",
+        "other": "Lainnya"
+      },
+      "email": "Email Bisnis",
+      "emailPlaceholder": "kontak@bisnisanda.com",
+      "phone": "Nomor Telepon",
+      "phonePlaceholder": "08xxxxxxxxxx",
+      "phoneHint": "Opsional",
+      "continue": "Lanjut"
+    },
+    "bankAccount": {
+      "title": "Tambah Rekening Bank",
+      "subtitle": "Rekening ini akan tampil di faktur sebagai tujuan pembayaran",
+      "bank": "Nama Bank",
+      "selectBank": "Pilih bank...",
+      "accountNumber": "Nomor Rekening",
+      "accountNumberPlaceholder": "1234567890",
+      "accountHolderName": "Nama Pemilik Rekening",
+      "accountHolderPlaceholder": "Budi Santoso",
+      "continue": "Lanjut",
+      "skip": "Lewati untuk sekarang"
+    },
+    "logo": {
+      "title": "Logo Bisnis",
+      "subtitle": "Logo akan tampil di bagian atas faktur Anda",
+      "dropzone": "Seret & lepas gambar di sini, atau klik untuk memilih",
+      "hint": "JPG, PNG, atau WebP. Maks 2MB.",
+      "uploading": "Mengunggah...",
+      "changeFile": "Ganti gambar",
+      "continue": "Lanjut",
+      "skip": "Lewati untuk sekarang"
+    },
+    "invoicePrefs": {
+      "title": "Preferensi Faktur",
+      "subtitle": "Sesuaikan format penomoran dan ketentuan pembayaran",
+      "prefix": "Prefix Nomor Faktur",
+      "prefixPlaceholder": "INV",
+      "format": "Format Nomor Faktur",
+      "paymentTerms": "Jangka Waktu Pembayaran Default",
+      "notes": "Catatan Default",
+      "notesPlaceholder": "Terima kasih atas kepercayaan Anda...",
+      "notesHint": "Opsional — ditampilkan di bagian bawah faktur",
+      "finish": "Selesai — Masuk ke Dashboard",
+      "skip": "Lewati untuk sekarang"
+    },
+    "errors": {
+      "businessNameRequired": "Nama bisnis wajib diisi",
+      "slugRequired": "URL bisnis wajib diisi",
+      "slugInvalid": "Hanya huruf kecil, angka, dan tanda hubung (-)",
+      "slugTooShort": "Minimal 3 karakter",
+      "businessTypeRequired": "Jenis usaha wajib dipilih",
+      "emailRequired": "Email bisnis wajib diisi",
+      "emailInvalid": "Format email tidak valid",
+      "bankRequired": "Pilih bank terlebih dahulu",
+      "accountNumberRequired": "Nomor rekening wajib diisi",
+      "accountHolderRequired": "Nama pemilik rekening wajib diisi",
+      "prefixRequired": "Prefix wajib diisi",
+      "createTenantFailed": "Gagal membuat profil bisnis. Silakan coba lagi.",
+      "slugTaken": "URL bisnis ini sudah digunakan, coba yang lain.",
+      "bankAccountFailed": "Gagal menyimpan rekening bank.",
+      "logoFailed": "Gagal mengunggah logo.",
+      "invoicePrefsFailed": "Gagal menyimpan preferensi faktur."
+    }
   }
 }

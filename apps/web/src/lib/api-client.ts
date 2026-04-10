@@ -50,6 +50,18 @@ export const apiClient = {
     request<T>(path, { method: 'PATCH', body: JSON.stringify(body), ...(token ? { token } : {}) }),
   delete: <T>(path: string, token?: string) =>
     request<T>(path, { method: 'DELETE', ...(token ? { token } : {}) }),
+  upload: async <T>(path: string, formData: FormData, token?: string): Promise<T> => {
+    const res = await fetch(`${API_URL}${path}`, {
+      method: 'POST',
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+      body: formData,
+    })
+    if (!res.ok) {
+      const body = (await res.json().catch(() => ({}))) as { error?: string; code?: string }
+      throw new ApiError(res.status, body.code ?? 'UNKNOWN', body.error ?? res.statusText)
+    }
+    return res.json() as Promise<T>
+  },
 }
 
 export { ApiError }
