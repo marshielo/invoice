@@ -57,6 +57,7 @@ func main() {
 	authService := service.NewAuthService(userRepo)
 	tenantService := service.NewTenantService(tenantRepo, userRepo, db, sb)
 	tenantSettingsService := service.NewTenantSettingsService(tenantRepo, storageRepo)
+	userService := service.NewUserService(userRepo, sb)
 	storageService := service.NewStorageService(storageRepo)
 
 	// 8. Wire controllers
@@ -64,6 +65,7 @@ func main() {
 	authCtrl := controller.NewAuthController(authService)
 	tenantCtrl := controller.NewTenantController(tenantService)
 	tenantSettingsCtrl := controller.NewTenantSettingsController(tenantSettingsService, tenantService)
+	userCtrl := controller.NewUserController(userService, tenantSettingsService)
 	uploadCtrl := controller.NewUploadController(storageService)
 
 	// 9. Register custom validators
@@ -76,6 +78,7 @@ func main() {
 		AuthController:           authCtrl,
 		TenantController:         tenantCtrl,
 		TenantSettingsController: tenantSettingsCtrl,
+		UserController:           userCtrl,
 		UploadController:         uploadCtrl,
 		UserRepository:           userRepo,
 	})

@@ -18,6 +18,7 @@ type Deps struct {
 	AuthController           *controller.AuthController
 	TenantController         *controller.TenantController
 	TenantSettingsController *controller.TenantSettingsController
+	UserController           *controller.UserController
 	UploadController         *controller.UploadController
 	UserRepository           *repository.UserRepository
 }
@@ -89,6 +90,18 @@ func New(deps Deps) *gin.Engine {
 				ba.DELETE("/:id", deps.TenantSettingsController.DeleteBankAccount)
 			}
 		}
+	}
+
+	// --- Users ---
+	users := api.Group("/users")
+	users.Use(authMW)
+	users.Use(tenantMW)
+	{
+		users.GET("", deps.UserController.ListUsers)
+		users.GET("/me", deps.UserController.GetMe)
+		users.POST("/invite", deps.UserController.InviteUser)
+		users.PATCH("/:id", deps.UserController.UpdateRole)
+		users.DELETE("/:id", deps.UserController.DeactivateUser)
 	}
 
 	// --- Upload (generic file uploads) ---

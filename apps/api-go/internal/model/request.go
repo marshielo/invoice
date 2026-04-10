@@ -46,3 +46,14 @@ type CreateBankAccountRequest struct {
 	BankCode          *string `json:"bankCode" binding:"omitempty,max=20"`
 	IsPrimary         bool    `json:"isPrimary"`
 }
+
+// InviteUserRequest is the body for POST /api/v1/users/invite.
+type InviteUserRequest struct {
+	Email string `json:"email" binding:"required,email"`
+	Role  string `json:"role" binding:"required,oneof=admin staff viewer"`
+}
+
+// UpdateUserRoleRequest is the body for PATCH /api/v1/users/:id.
+type UpdateUserRoleRequest struct {
+	Role string `json:"role" binding:"required,oneof=admin staff viewer"`
+}

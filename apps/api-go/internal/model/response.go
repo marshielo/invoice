@@ -156,3 +156,25 @@ type QRISData struct {
 	QrisNMID     string `json:"qrisNmid,omitempty"`
 	IsActive     bool   `json:"isActive"`
 }
+
+// UserData represents a single user in list/detail responses.
+type UserData struct {
+	ID          string  `json:"id"`
+	Email       string  `json:"email"`
+	FullName    string  `json:"fullName"`
+	Phone       *string `json:"phone"`
+	AvatarURL   *string `json:"avatarUrl"`
+	Role        string  `json:"role"`
+	Locale      string  `json:"locale"`
+	IsActive    bool    `json:"isActive"`
+	LastLoginAt *string `json:"lastLoginAt"`
+	CreatedAt   string  `json:"createdAt"`
+}
+
+// UsersListResponse is returned by GET /api/v1/users.
+type UsersListResponse struct {
+	Users  []UserData `json:"users"`
+	Total  int        `json:"total"`
+	Limit  int        `json:"limit"`
+	Offset int        `json:"offset"`
+}

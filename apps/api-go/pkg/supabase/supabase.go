@@ -102,3 +102,113 @@ func (c *Client) UpdateUserAppMetadata(userID string, metadata map[string]interf
 
 	return nil
 }
+
+// InviteUserByEmail sends a Supabase Auth invitation email.
+// Returns the new Supabase user ID on success.
+func (c *Client) InviteUserByEmail(email string) (string, error) {
+	body := map[string]interface{}{
+		"email": email,
+	}
+	jsonBody, err := json.Marshal(body)
+	if err != nil {
+		return "", fmt.Errorf("failed to marshal invite body: %w", err)
+	}
+
+	url := fmt.Sprintf("%s/auth/v1/admin/invite", c.baseURL)
+	req, err := http.NewRequest(http.MethodPost, url, bytes.NewReader(jsonBody))
+	if err != nil {
+		return "", fmt.Errorf("failed to create request: %w", err)
+	}
+
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", "Bearer "+c.serviceRoleKey)
+	req.Header.Set("apikey", c.serviceRoleKey)
+
+	resp, err := c.httpClient.Do(req)
+	if err != nil {
+		return "", fmt.Errorf("supabase request failed: %w", err)
+	}
+	defer resp.Body.Close()
+
+	respBody, _ := io.ReadAll(resp.Body)
+	if resp.StatusCode >= 400 {
+		return "", fmt.Errorf("supabase invite error (status %d): %s", resp.StatusCode, string(respBody))
+	}
+
+	var result struct {
+		ID string `json:"id"`
+	}
+	if err := json.Unmarshal(respBody, &result); err != nil {
+		return "", fmt.Errorf("failed to parse invite response: %w", err)
+	}
+
+	return result.ID, nil
+}
+
+// BanUser disables a Supabase Auth user so they can no longer log in.
+func (c *Client) BanUser(userID string) error {
+	body := map[string]interface{}{
+		"ban_duration": "876000h", // effectively permanent (~100 years)
+	}
+	jsonBody, err := json.Marshal(body)
+	if err != nil {
+		return fmt.Errorf("failed to marshal ban body: %w", err)
+	}
+
+	url := fmt.Sprintf("%s/auth/v1/admin/users/%s", c.baseURL, userID)
+	req, err := http.NewRequest(http.MethodPut, url, bytes.NewReader(jsonBody))
+	if err != nil {
+		return fmt.Errorf("failed to create request: %w", err)
+	}
+
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", "Bearer "+c.serviceRoleKey)
+	req.Header.Set("apikey", c.serviceRoleKey)
+
+	resp, err := c.httpClient.Do(req)
+	if err != nil {
+		return fmt.Errorf("supabase request failed: %w", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode >= 400 {
+		respBody, _ := io.ReadAll(resp.Body)
+		return fmt.Errorf("supabase ban error (status %d): %s", resp.StatusCode, string(respBody))
+	}
+
+	return nil
+}
+
+// UnbanUser re-enables a previously banned Supabase Auth user.
+func (c *Client) UnbanUser(userID string) error {
+	body := map[string]interface{}{
+		"ban_duration": "none",
+	}
+	jsonBody, err := json.Marshal(body)
+	if err != nil {
+		return fmt.Errorf("failed to marshal unban body: %w", err)
+	}
+
+	url := fmt.Sprintf("%s/auth/v1/admin/users/%s", c.baseURL, userID)
+	req, err := http.NewRequest(http.MethodPut, url, bytes.NewReader(jsonBody))
+	if err != nil {
+		return fmt.Errorf("failed to create request: %w", err)
+	}
+
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", "Bearer "+c.serviceRoleKey)
+	req.Header.Set("apikey", c.serviceRoleKey)
+
+	resp, err := c.httpClient.Do(req)
+	if err != nil {
+		return fmt.Errorf("supabase request failed: %w", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode >= 400 {
+		respBody, _ := io.ReadAll(resp.Body)
+		return fmt.Errorf("supabase unban error (status %d): %s", resp.StatusCode, string(respBody))
+	}
+
+	return nil
+}

@@ -192,3 +192,113 @@ func (r *UserRepository) CreateTx(ctx context.Context, tx *sql.Tx, u *model.User
 		u.ID, u.TenantID, u.Email, u.FullName, u.Role, u.Locale, u.IsActive,
 	).Scan(&u.CreatedAt, &u.UpdatedAt)
 }
+
+// ListByTenantID returns all active users for a tenant, paginated.
+func (r *UserRepository) ListByTenantID(ctx context.Context, tenantID string, limit, offset int) ([]model.User, int, error) {
+	// Total count
+	var total int
+	if err := r.db.QueryRowContext(ctx,
+		`SELECT COUNT(*) FROM users WHERE tenant_id = $1`, tenantID,
+	).Scan(&total); err != nil {
+		return nil, 0, err
+	}
+
+	query := `
+		SELECT id, tenant_id, email, full_name, phone, avatar_url, role, locale,
+		       is_active, last_login_at, created_at, updated_at
+		FROM users
+		WHERE tenant_id = $1
+		ORDER BY created_at ASC
+		LIMIT $2 OFFSET $3`
+
+	rows, err := r.db.QueryContext(ctx, query, tenantID, limit, offset)
+	if err != nil {
+		return nil, 0, err
+	}
+	defer rows.Close()
+
+	var users []model.User
+	for rows.Next() {
+		var u model.User
+		if err := rows.Scan(
+			&u.ID, &u.TenantID, &u.Email, &u.FullName, &u.Phone, &u.AvatarURL,
+			&u.Role, &u.Locale, &u.IsActive, &u.LastLoginAt, &u.CreatedAt, &u.UpdatedAt,
+		); err != nil {
+			return nil, 0, err
+		}
+		users = append(users, u)
+	}
+	return users, total, rows.Err()
+}
+
+// CountActiveByTenantID returns the number of active users in a tenant.
+func (r *UserRepository) CountActiveByTenantID(ctx context.Context, tenantID string) (int, error) {
+	var count int
+	err := r.db.QueryRowContext(ctx,
+		`SELECT COUNT(*) FROM users WHERE tenant_id = $1 AND is_active = true`, tenantID,
+	).Scan(&count)
+	return count, err
+}
+
+// FindByTenantAndID returns a single user verified to belong to the given tenant.
+func (r *UserRepository) FindByTenantAndID(ctx context.Context, id, tenantID string) (*model.User, error) {
+	query := `
+		SELECT id, tenant_id, email, full_name, phone, avatar_url, role, locale,
+		       is_active, last_login_at, created_at, updated_at
+		FROM users
+		WHERE id = $1 AND tenant_id = $2`
+
+	var u model.User
+	err := r.db.QueryRowContext(ctx, query, id, tenantID).Scan(
+		&u.ID, &u.TenantID, &u.Email, &u.FullName, &u.Phone, &u.AvatarURL,
+		&u.Role, &u.Locale, &u.IsActive, &u.LastLoginAt, &u.CreatedAt, &u.UpdatedAt,
+	)
+	if err == sql.ErrNoRows {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+	return &u, nil
+}
+
+// UpdateRole sets the role for a user.
+func (r *UserRepository) UpdateRole(ctx context.Context, id, tenantID, role string) error {
+	res, err := r.db.ExecContext(ctx,
+		`UPDATE users SET role = $1, updated_at = NOW() WHERE id = $2 AND tenant_id = $3`,
+		role, id, tenantID,
+	)
+	if err != nil {
+		return err
+	}
+	n, _ := res.RowsAffected()
+	if n == 0 {
+		return sql.ErrNoRows
+	}
+	return nil
+}
+
+// Deactivate soft-deletes a user by setting is_active = false.
+func (r *UserRepository) Deactivate(ctx context.Context, id, tenantID string) error {
+	res, err := r.db.ExecContext(ctx,
+		`UPDATE users SET is_active = false, updated_at = NOW() WHERE id = $1 AND tenant_id = $2`,
+		id, tenantID,
+	)
+	if err != nil {
+		return err
+	}
+	n, _ := res.RowsAffected()
+	if n == 0 {
+		return sql.ErrNoRows
+	}
+	return nil
+}
+
+// ExistsByEmail returns true if a user with the given email exists in the tenant.
+func (r *UserRepository) ExistsByEmail(ctx context.Context, email, tenantID string) (bool, error) {
+	var count int
+	err := r.db.QueryRowContext(ctx,
+		`SELECT COUNT(*) FROM users WHERE email = $1 AND tenant_id = $2`, email, tenantID,
+	).Scan(&count)
+	return count > 0, err
+}
