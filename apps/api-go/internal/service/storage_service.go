@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/invoicein/api-go/internal/repository"
 )
@@ -81,27 +82,8 @@ func (s *StorageService) DeleteFile(ctx context.Context, tenantID, key string) e
 }
 
 func containsTenantID(key, tenantID string) bool {
-	// R2 keys always include /{tenantID}/ as path segment
-	return len(key) > 0 && containsSegment(key, tenantID)
-}
-
-func containsSegment(key, tenantID string) bool {
-	// Check for /tenantID/ pattern anywhere in the key
-	search := "/" + tenantID + "/"
-	return len(key) >= len(search) && contains(key, search)
-}
-
-func contains(s, substr string) bool {
-	return len(s) >= len(substr) && (s == substr || len(s) > 0 && indexOfSubstring(s, substr) >= 0)
-}
-
-func indexOfSubstring(s, substr string) int {
-	for i := 0; i <= len(s)-len(substr); i++ {
-		if s[i:i+len(substr)] == substr {
-			return i
-		}
-	}
-	return -1
+	// R2 keys always include /{tenantID}/ as a path segment
+	return len(key) > 0 && strings.Contains(key, "/"+tenantID+"/")
 }
 
 // ValidationError indicates invalid input.

@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"strconv"
 	"sync"
 	"time"
 
@@ -63,8 +64,8 @@ func (rl *rateLimiter) middleware() gin.HandlerFunc {
 		if entry.count >= rl.limit {
 			retryAfter := int(time.Until(entry.resetAt).Seconds()) + 1
 			rl.mu.Unlock()
-			c.Header("Retry-After", string(rune(retryAfter)))
-			c.Header("X-RateLimit-Limit", string(rune(rl.limit)))
+			c.Header("Retry-After", strconv.Itoa(retryAfter))
+			c.Header("X-RateLimit-Limit", strconv.Itoa(rl.limit))
 			c.Header("X-RateLimit-Remaining", "0")
 			response.RateLimited(c)
 			c.Abort()
@@ -75,8 +76,8 @@ func (rl *rateLimiter) middleware() gin.HandlerFunc {
 		remaining := rl.limit - entry.count
 		rl.mu.Unlock()
 
-		c.Header("X-RateLimit-Limit", string(rune(rl.limit)))
-		c.Header("X-RateLimit-Remaining", string(rune(remaining)))
+		c.Header("X-RateLimit-Limit", strconv.Itoa(rl.limit))
+		c.Header("X-RateLimit-Remaining", strconv.Itoa(remaining))
 		c.Next()
 	}
 }
