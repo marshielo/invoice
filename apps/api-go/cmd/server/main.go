@@ -56,12 +56,14 @@ func main() {
 	// 7. Wire services
 	authService := service.NewAuthService(userRepo)
 	tenantService := service.NewTenantService(tenantRepo, userRepo, db, sb)
+	tenantSettingsService := service.NewTenantSettingsService(tenantRepo, storageRepo)
 	storageService := service.NewStorageService(storageRepo)
 
 	// 8. Wire controllers
 	healthCtrl := controller.NewHealthController(cfg.Environment)
 	authCtrl := controller.NewAuthController(authService)
 	tenantCtrl := controller.NewTenantController(tenantService)
+	tenantSettingsCtrl := controller.NewTenantSettingsController(tenantSettingsService, tenantService)
 	uploadCtrl := controller.NewUploadController(storageService)
 
 	// 9. Register custom validators
@@ -69,12 +71,13 @@ func main() {
 
 	// 10. Build router
 	r := router.New(router.Deps{
-		SupabaseClient:   sb,
-		HealthController: healthCtrl,
-		AuthController:   authCtrl,
-		TenantController: tenantCtrl,
-		UploadController: uploadCtrl,
-		UserRepository:   userRepo,
+		SupabaseClient:           sb,
+		HealthController:         healthCtrl,
+		AuthController:           authCtrl,
+		TenantController:         tenantCtrl,
+		TenantSettingsController: tenantSettingsCtrl,
+		UploadController:         uploadCtrl,
+		UserRepository:           userRepo,
 	})
 
 	// 11. Start server

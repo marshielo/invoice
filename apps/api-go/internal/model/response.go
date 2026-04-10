@@ -115,3 +115,44 @@ type UploadResponse struct {
 type DeleteResponse struct {
 	Deleted string `json:"deleted"`
 }
+
+// SettingsResponse is returned by GET /api/v1/tenants/settings.
+type SettingsResponse struct {
+	ID                      string            `json:"id"`
+	Slug                    string            `json:"slug"`
+	Name                    string            `json:"name"`
+	Email                   string            `json:"email"`
+	Phone                   *string           `json:"phone"`
+	Address                 *string           `json:"address"`
+	City                    *string           `json:"city"`
+	Province                *string           `json:"province"`
+	PostalCode              *string           `json:"postalCode"`
+	NPWP                    *string           `json:"npwp"`
+	BusinessType            string            `json:"businessType"`
+	LogoURL                 *string           `json:"logoUrl"`
+	SubscriptionPlan        string            `json:"subscriptionPlan"`
+	SubscriptionExpiresAt   *string           `json:"subscriptionExpiresAt"`
+	InvoicePrefix           string            `json:"invoicePrefix"`
+	InvoiceFormat           string            `json:"invoiceFormat"`
+	QuotationPrefix         string            `json:"quotationPrefix"`
+	CreditNotePrefix        string            `json:"creditNotePrefix"`
+	DefaultCurrency         string            `json:"defaultCurrency"`
+	DefaultPaymentTermsDays int               `json:"defaultPaymentTermsDays"`
+	DefaultNotes            *string           `json:"defaultNotes"`
+	DefaultTerms            *string           `json:"defaultTerms"`
+	PPNEnabled              bool              `json:"ppnEnabled"`
+	PPNRate                 string            `json:"ppnRate"`
+	Branding                interface{}       `json:"branding"`
+	BankAccounts            []BankAccountData `json:"bankAccounts"`
+	QRIS                    *QRISData         `json:"qris"`
+	CreatedAt               string            `json:"createdAt"`
+	UpdatedAt               string            `json:"updatedAt"`
+}
+
+// QRISData holds QRIS info returned in settings.
+type QRISData struct {
+	ID           string `json:"id"`
+	QrisImageURL string `json:"qrisImageUrl"`
+	QrisNMID     string `json:"qrisNmid,omitempty"`
+	IsActive     bool   `json:"isActive"`
+}
