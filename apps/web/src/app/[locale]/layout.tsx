@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation'
 import { Inter } from 'next/font/google'
 import { QueryProvider } from '@/components/providers/query-provider'
 import { locales, type Locale } from '@/i18n/config'
-import '../../globals.css'
+import '../globals.css'
 
 const inter = Inter({
   subsets: ['latin'],
