@@ -65,6 +65,7 @@ func main() {
 	clientService := service.NewClientService(clientRepo)
 	productService := service.NewProductService(productRepo)
 	invoiceService := service.NewInvoiceService(invoiceRepo)
+	invoicePDFService := service.NewInvoicePDFService(invoiceRepo, tenantRepo, storageRepo)
 
 	// 8. Wire controllers
 	healthCtrl := controller.NewHealthController(cfg.Environment)
@@ -75,7 +76,7 @@ func main() {
 	uploadCtrl := controller.NewUploadController(storageService)
 	clientCtrl := controller.NewClientController(clientService)
 	productCtrl := controller.NewProductController(productService)
-	invoiceCtrl := controller.NewInvoiceController(invoiceService)
+	invoiceCtrl := controller.NewInvoiceController(invoiceService, invoicePDFService)
 
 	// 9. Register custom validators
 	customvalidator.RegisterCustomValidators()

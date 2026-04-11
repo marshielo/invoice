@@ -13,12 +13,13 @@ import (
 
 // InvoiceController handles invoice-related endpoints.
 type InvoiceController struct {
-	svc *service.InvoiceService
+	svc    *service.InvoiceService
+	pdfSvc *service.InvoicePDFService
 }
 
 // NewInvoiceController creates a new InvoiceController.
-func NewInvoiceController(svc *service.InvoiceService) *InvoiceController {
-	return &InvoiceController{svc: svc}
+func NewInvoiceController(svc *service.InvoiceService, pdfSvc *service.InvoicePDFService) *InvoiceController {
+	return &InvoiceController{svc: svc, pdfSvc: pdfSvc}
 }
 
 // ─── List ─────────────────────────────────────────────────────────────────────
@@ -162,6 +163,7 @@ func (ic *InvoiceController) DeleteInvoice(c *gin.Context) {
 // ─── Status Transitions ───────────────────────────────────────────────────────
 
 // SendInvoice handles POST /api/v1/invoices/:id/send.
+// It transitions the invoice to "sent" and asynchronously generates a PDF.
 func (ic *InvoiceController) SendInvoice(c *gin.Context) {
 	tenantID := c.GetString(middleware.CtxTenantID)
 	id := c.Param("id")
@@ -179,7 +181,36 @@ func (ic *InvoiceController) SendInvoice(c *gin.Context) {
 		return
 	}
 
+	// Auto-generate PDF in the background; non-fatal if it fails.
+	go func() {
+		if _, pdfErr := ic.pdfSvc.GenerateAndStore(c.Request.Context(), id, tenantID); pdfErr != nil {
+			// Log but do not fail the request — the PDF can be regenerated manually.
+			_ = pdfErr
+		}
+	}()
+
 	response.Success(c, inv)
+}
+
+// GeneratePDF handles POST /api/v1/invoices/:id/pdf.
+// Generates (or regenerates) the PDF for an invoice and returns the PDF URL.
+func (ic *InvoiceController) GeneratePDF(c *gin.Context) {
+	tenantID := c.GetString(middleware.CtxTenantID)
+	id := c.Param("id")
+
+	pdfURL, err := ic.pdfSvc.GenerateAndStore(c.Request.Context(), id, tenantID)
+	if err != nil {
+		switch e := err.(type) {
+		case *service.NotFoundError:
+			response.NotFound(c, e.Resource)
+		default:
+			_ = e
+			response.InternalError(c, "Gagal membuat PDF invoice")
+		}
+		return
+	}
+
+	response.Success(c, gin.H{"pdf_url": pdfURL})
 }
 
 // CancelInvoice handles POST /api/v1/invoices/:id/cancel.
