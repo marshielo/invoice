@@ -154,6 +154,7 @@ func New(deps Deps) *gin.Engine {
 		invoices.DELETE("/:id", deps.InvoiceController.DeleteInvoice)
 		invoices.POST("/:id/send", deps.InvoiceController.SendInvoice)
 		invoices.POST("/:id/cancel", deps.InvoiceController.CancelInvoice)
+		invoices.POST("/:id/pdf", deps.InvoiceController.GeneratePDF)
 		invoices.POST("/:id/payments", deps.InvoiceController.CreatePayment)
 		invoices.DELETE("/:id/payments/:payment_id", deps.InvoiceController.DeletePayment)
 	}
