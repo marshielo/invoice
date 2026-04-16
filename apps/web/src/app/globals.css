@@ -2,6 +2,9 @@
 
 /* ── Tailwind v4: map CSS variables to theme tokens ────────────────────────── */
 @theme inline {
+  --font-sans: var(--font-sans);
+  --font-display: var(--font-display);
+
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
   --color-card: hsl(var(--card));
@@ -26,48 +29,27 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* ── Warm Manuscript — Literary Light Theme ──────────────── */
+    --background: 38 28% 97%;         /* warm ivory     #F8F5F0 */
+    --foreground: 22 22% 12%;         /* warm ink       #1D1812 */
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 22 22% 12%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 199 89% 48%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 199 89% 48%;
+    --popover-foreground: 22 22% 12%;
+    --primary: 158 68% 30%;            /* forest green    #177A50 */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 38 20% 92%;          /* warm sand       #EBE5DB */
+    --secondary-foreground: 22 22% 20%;
+    --muted: 38 16% 95%;              /* warm light      #F3EFE9 */
+    --muted-foreground: 28 9% 50%;    /* warm stone      #7E7162 */
+    --accent: 158 50% 24%;            /* deep forest     #0D5C38 */
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 68% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 35 16% 86%;             /* warm beige      #DDD5C6 */
+    --input: 35 16% 86%;
+    --ring: 158 68% 30%;
     --radius-base: 0.5rem;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 199 89% 48%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 199 89% 48%;
   }
 }
 
@@ -75,7 +57,92 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
+    line-height: 1.75;
+    letter-spacing: 0.012em;
   }
+
+  p {
+    line-height: 1.8;
+    letter-spacing: 0.01em;
+  }
+
+  ::selection {
+    background-color: hsl(158 68% 30% / 0.18);
+    color: hsl(22 22% 12%);
+  }
+}
+
+/* ── Custom utilities ──────────────────────────────────────────────────────── */
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display), Georgia, serif;
+  }
+
+  /* Generous editorial line-height */
+  .leading-editorial {
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+
+  /* Small-caps overline style */
+  .overline-text {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+}
+
+/* ── SVG motif animation keyframes ────────────────────────────────────────── */
+@keyframes motif-breathe {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.04); }
+}
+
+@keyframes motif-drift {
+  0%, 100% { transform: translate(0px, 0px); }
+  30%      { transform: translate(5px, -9px); }
+  65%      { transform: translate(-4px, 5px); }
+}
+
+@keyframes motif-orbit-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* ── Page reveal animations ────────────────────────────────────────────────── */
+@keyframes editorial-reveal {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in-slow {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── Motif element classes ─────────────────────────────────────────────────── */
+.motif-primary-circle {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: motif-breathe 10s ease-in-out infinite;
+}
+
+.motif-secondary-circle {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: motif-breathe 13s ease-in-out infinite 1.8s;
+}
+
+.motif-outer-ellipse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: motif-orbit-slow 60s linear infinite;
+}
+
+.motif-svg-wrap {
+  animation: motif-drift 18s ease-in-out infinite;
 }
