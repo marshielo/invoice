@@ -7,6 +7,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/jackc/pgx/v5/stdlib"
+	"github.com/joho/godotenv"
 	appconfig "github.com/invoicein/api-go/internal/config"
 	"github.com/invoicein/api-go/internal/controller"
 	"github.com/invoicein/api-go/internal/repository"
@@ -17,6 +18,9 @@ import (
 )
 
 func main() {
+	// 0. Load .env file in development (no-op in production where env vars are injected)
+	_ = godotenv.Load()
+
 	// 1. Load configuration
 	cfg, err := appconfig.Load()
 	if err != nil {
