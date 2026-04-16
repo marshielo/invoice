@@ -52,6 +52,8 @@ func main() {
 	// 6. Wire repositories
 	tenantRepo := repository.NewTenantRepository(db)
 	userRepo := repository.NewUserRepository(db)
+	clientRepo := repository.NewClientRepository(db)
+	productRepo := repository.NewProductRepository(db)
 
 	// 7. Wire services
 	authService := service.NewAuthService(userRepo)
@@ -59,6 +61,8 @@ func main() {
 	tenantSettingsService := service.NewTenantSettingsService(tenantRepo, storageRepo)
 	userService := service.NewUserService(userRepo, sb)
 	storageService := service.NewStorageService(storageRepo)
+	clientService := service.NewClientService(clientRepo)
+	productService := service.NewProductService(productRepo)
 
 	// 8. Wire controllers
 	healthCtrl := controller.NewHealthController(cfg.Environment)
@@ -67,6 +71,8 @@ func main() {
 	tenantSettingsCtrl := controller.NewTenantSettingsController(tenantSettingsService, tenantService)
 	userCtrl := controller.NewUserController(userService, tenantSettingsService)
 	uploadCtrl := controller.NewUploadController(storageService)
+	clientCtrl := controller.NewClientController(clientService)
+	productCtrl := controller.NewProductController(productService)
 
 	// 9. Register custom validators
 	customvalidator.RegisterCustomValidators()
@@ -80,6 +86,8 @@ func main() {
 		TenantSettingsController: tenantSettingsCtrl,
 		UserController:           userCtrl,
 		UploadController:         uploadCtrl,
+		ClientController:         clientCtrl,
+		ProductController:        productCtrl,
 		UserRepository:           userRepo,
 	})
 

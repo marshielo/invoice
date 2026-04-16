@@ -20,6 +20,8 @@ type Deps struct {
 	TenantSettingsController *controller.TenantSettingsController
 	UserController           *controller.UserController
 	UploadController         *controller.UploadController
+	ClientController         *controller.ClientController
+	ProductController        *controller.ProductController
 	UserRepository           *repository.UserRepository
 }
 
@@ -113,6 +115,30 @@ func New(deps Deps) *gin.Engine {
 		upload.POST("/qris", deps.UploadController.UploadQris)
 		upload.POST("/payment-proof/:paymentId", deps.UploadController.UploadPaymentProof)
 		upload.DELETE("/:encodedKey", deps.UploadController.DeleteFile)
+	}
+
+	// --- Clients ---
+	clients := api.Group("/clients")
+	clients.Use(authMW)
+	clients.Use(tenantMW)
+	{
+		clients.GET("", deps.ClientController.ListClients)
+		clients.POST("", deps.ClientController.CreateClient)
+		clients.GET("/:id", deps.ClientController.GetClient)
+		clients.PATCH("/:id", deps.ClientController.UpdateClient)
+		clients.DELETE("/:id", deps.ClientController.DeleteClient)
+	}
+
+	// --- Products ---
+	products := api.Group("/products")
+	products.Use(authMW)
+	products.Use(tenantMW)
+	{
+		products.GET("", deps.ProductController.ListProducts)
+		products.POST("", deps.ProductController.CreateProduct)
+		products.GET("/:id", deps.ProductController.GetProduct)
+		products.PATCH("/:id", deps.ProductController.UpdateProduct)
+		products.DELETE("/:id", deps.ProductController.DeleteProduct)
 	}
 
 	return r
