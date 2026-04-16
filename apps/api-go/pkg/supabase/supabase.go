@@ -2,6 +2,7 @@ package supabase
 
 import (
 	"bytes"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -21,11 +22,19 @@ type Client struct {
 }
 
 // NewClient creates a new Supabase admin client.
+// jwtSecret is the raw value from Supabase project settings — it may be
+// base64-encoded (the Supabase dashboard shows the encoded form).
+// We try to decode it; if that fails we fall back to using the raw bytes.
 func NewClient(baseURL, serviceRoleKey, jwtSecret string) *Client {
+	secretBytes, err := base64.StdEncoding.DecodeString(jwtSecret)
+	if err != nil {
+		// Not valid base64 — use the string directly as the HMAC key
+		secretBytes = []byte(jwtSecret)
+	}
 	return &Client{
 		baseURL:        strings.TrimRight(baseURL, "/"),
 		serviceRoleKey: serviceRoleKey,
-		jwtSecret:      []byte(jwtSecret),
+		jwtSecret:      secretBytes,
 		httpClient: &http.Client{
 			Timeout: 10 * time.Second,
 		},
