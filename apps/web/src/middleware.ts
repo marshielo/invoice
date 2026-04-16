@@ -9,6 +9,7 @@ export const config = {
     // - files with an extension (e.g. favicon.ico)
     // - _next internal paths
     // - api routes
-    '/((?!_next|api|.*\\..*).*)',
+    // - auth/callback (Supabase OAuth handler — must not be locale-prefixed)
+    '/((?!_next|api|auth/callback|.*\\..*).*)',
   ],
 }
