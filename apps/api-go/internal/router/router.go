@@ -22,6 +22,7 @@ type Deps struct {
 	UploadController         *controller.UploadController
 	ClientController         *controller.ClientController
 	ProductController        *controller.ProductController
+	InvoiceController        *controller.InvoiceController
 	UserRepository           *repository.UserRepository
 }
 
@@ -139,6 +140,22 @@ func New(deps Deps) *gin.Engine {
 		products.GET("/:id", deps.ProductController.GetProduct)
 		products.PATCH("/:id", deps.ProductController.UpdateProduct)
 		products.DELETE("/:id", deps.ProductController.DeleteProduct)
+	}
+
+	// --- Invoices ---
+	invoices := api.Group("/invoices")
+	invoices.Use(authMW)
+	invoices.Use(tenantMW)
+	{
+		invoices.GET("", deps.InvoiceController.ListInvoices)
+		invoices.POST("", deps.InvoiceController.CreateInvoice)
+		invoices.GET("/:id", deps.InvoiceController.GetInvoice)
+		invoices.PATCH("/:id", deps.InvoiceController.UpdateInvoice)
+		invoices.DELETE("/:id", deps.InvoiceController.DeleteInvoice)
+		invoices.POST("/:id/send", deps.InvoiceController.SendInvoice)
+		invoices.POST("/:id/cancel", deps.InvoiceController.CancelInvoice)
+		invoices.POST("/:id/payments", deps.InvoiceController.CreatePayment)
+		invoices.DELETE("/:id/payments/:payment_id", deps.InvoiceController.DeletePayment)
 	}
 
 	return r
