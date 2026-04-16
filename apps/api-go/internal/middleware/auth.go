@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"log"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -19,6 +20,10 @@ const (
 func AuthMiddleware(sb *supabase.Client) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
+		log.Printf("[AuthMiddleware] %s %s | Authorization header present: %v (len=%d)",
+			c.Request.Method, c.Request.URL.Path,
+			strings.HasPrefix(authHeader, "Bearer "), len(authHeader))
+
 		if !strings.HasPrefix(authHeader, "Bearer ") {
 			response.Unauthorized(c, "Token autentikasi tidak ditemukan")
 			c.Abort()
@@ -32,8 +37,10 @@ func AuthMiddleware(sb *supabase.Client) gin.HandlerFunc {
 			return
 		}
 
+		log.Printf("[AuthMiddleware] token len=%d", len(token))
 		claims, err := sb.VerifyToken(token)
 		if err != nil {
+			log.Printf("[AuthMiddleware] VerifyToken failed: %v", err)
 			response.Unauthorized(c, "Token tidak valid atau sudah kadaluwarsa")
 			c.Abort()
 			return
