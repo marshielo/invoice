@@ -180,10 +180,13 @@
       "slugHint": "Used in your public invoice links",
       "businessType": "Business Type",
       "businessTypes": {
-        "individual": "Individual / Freelance",
-        "cv": "CV (Partnership)",
-        "pt": "PT (Limited Liability)",
-        "ud": "UD (Sole Proprietorship)",
+        "florist": "Florist / Flower Shop",
+        "freelancer": "Freelancer",
+        "workshop": "Workshop / Repair Shop",
+        "retail": "Retail / Store",
+        "food_beverage": "Food & Beverage",
+        "fashion": "Fashion / Clothing",
+        "service": "Service / Consulting",
         "other": "Other"
       },
       "email": "Business Email",

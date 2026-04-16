@@ -180,10 +180,13 @@
       "slugHint": "Digunakan pada link faktur publik Anda",
       "businessType": "Jenis Usaha",
       "businessTypes": {
-        "individual": "Individu / Freelance",
-        "cv": "CV (Persekutuan Komanditer)",
-        "pt": "PT (Perseroan Terbatas)",
-        "ud": "UD (Usaha Dagang)",
+        "florist": "Florist / Toko Bunga",
+        "freelancer": "Freelancer",
+        "workshop": "Workshop / Bengkel",
+        "retail": "Retail / Toko",
+        "food_beverage": "Makanan & Minuman",
+        "fashion": "Fashion / Pakaian",
+        "service": "Jasa / Konsultan",
         "other": "Lainnya"
       },
       "email": "Email Bisnis",
