@@ -1,4 +1,4 @@
-import { SubscriptionPlan } from '../enums/index.js'
+import { SubscriptionPlan } from '../enums/index'
 
 // -------------------------------------------------------
 // Indonesian Banks

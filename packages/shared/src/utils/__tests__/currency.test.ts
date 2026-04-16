@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { formatRupiah, formatRupiahCompact, parseRupiah } from '../currency.js'
+import { formatRupiah, formatRupiahCompact, parseRupiah } from '../currency'
 
 describe('formatRupiah', () => {
   it('formats zero', () => expect(formatRupiah(0)).toBe('Rp 0'))

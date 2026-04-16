@@ -1,4 +1,4 @@
-import { PPN_RATE } from '../constants/index.js'
+import { PPN_RATE } from '../constants/index'
 
 /**
  * Calculate PPN (tax) amount from a base amount.
