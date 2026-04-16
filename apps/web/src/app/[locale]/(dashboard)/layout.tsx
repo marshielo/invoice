@@ -1,15 +1,26 @@
 import { useTranslations } from 'next-intl'
+import { Link } from '@/lib/navigation'
+import { LayoutDashboard, FileText, Users, Package, Settings } from 'lucide-react'
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      {/* Sidebar — full implementation in E2-006 */}
-      <aside className="hidden w-64 flex-col border-r border-gray-200 bg-white lg:flex">
-        <div className="flex h-16 items-center border-b border-gray-200 px-6">
-          <span className="text-lg font-bold text-sky-600">Invoicein</span>
+    <div className="flex min-h-screen bg-background">
+      {/* Sidebar */}
+      <aside className="hidden w-60 flex-col border-r border-border bg-white lg:flex">
+        {/* Logo */}
+        <div className="flex h-14 shrink-0 items-center border-b border-border px-5">
+          <Link href="/dashboard">
+            <span className="font-display text-lg font-bold text-foreground" style={{ letterSpacing: '-0.01em' }}>
+              Invoice<span style={{ color: 'hsl(158 68% 30%)' }}>in</span>
+            </span>
+          </Link>
         </div>
+
+        {/* Nav */}
         <SidebarNav />
       </aside>
+
+      {/* Main */}
       <main className="flex-1 overflow-auto">
         <div className="p-6">{children}</div>
       </main>
@@ -19,25 +30,26 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
 function SidebarNav() {
   const t = useTranslations('nav')
+
   const items = [
-    { href: 'dashboard', label: t('dashboard'), icon: '🏠' },
-    { href: 'invoices', label: t('invoices'), icon: '📄' },
-    { href: 'clients', label: t('clients'), icon: '👥' },
-    { href: 'products', label: t('products'), icon: '📦' },
-    { href: 'settings', label: t('settings'), icon: '⚙️' },
+    { href: '/dashboard',  label: t('dashboard'), Icon: LayoutDashboard },
+    { href: '/invoices',   label: t('invoices'),  Icon: FileText },
+    { href: '/clients',    label: t('clients'),   Icon: Users },
+    { href: '/products',   label: t('products'),  Icon: Package },
+    { href: '/settings',   label: t('settings'),  Icon: Settings },
   ] as const
 
   return (
-    <nav className="flex-1 space-y-1 px-3 py-4">
-      {items.map((item) => (
-        <a
-          key={item.href}
-          href={item.href}
-          className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-gray-700 transition hover:bg-gray-100 hover:text-gray-900"
+    <nav className="flex-1 space-y-0.5 px-2 py-3">
+      {items.map(({ href, label, Icon }) => (
+        <Link
+          key={href}
+          href={href}
+          className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
         >
-          <span>{item.icon}</span>
-          <span>{item.label}</span>
-        </a>
+          <Icon className="h-4 w-4 shrink-0" />
+          <span>{label}</span>
+        </Link>
       ))}
     </nav>
   )
