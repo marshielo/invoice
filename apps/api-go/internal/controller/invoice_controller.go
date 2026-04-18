@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -72,6 +73,7 @@ func (ic *InvoiceController) CreateInvoice(c *gin.Context) {
 		case *service.ValidationError:
 			response.ValidationError(c, e.Message, nil)
 		default:
+			log.Printf("[CreateInvoice] error: %v", err)
 			response.InternalError(c, "Gagal membuat invoice")
 		}
 		return

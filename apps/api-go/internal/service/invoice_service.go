@@ -437,10 +437,12 @@ func generateInvoiceNumber(prefix, format string, issueDate time.Time, seq int) 
 		switch inner {
 		case "PREFIX":
 			return prefix
-		case "YEAR":
+		case "YEAR", "YYYY":
 			return issueDate.Format("2006")
-		case "MONTH":
+		case "MONTH", "MM":
 			return issueDate.Format("01")
+		case "DAY", "DD":
+			return issueDate.Format("02")
 		case "SEQ":
 			return fmt.Sprintf("%04d", seq)
 		default:
