@@ -67,7 +67,7 @@ interface RowProps {
 }
 
 function ItemRow({
-  idx, field, control, register, errors, canRemove, onRemove,
+  idx, field: _field, control, register, errors, canRemove, onRemove,
   productOptions, onProductSelect, onProductSearchOpen,
 }: RowProps) {
   const productId = useWatch({ control, name: `items.${idx}.product_id` }) ?? null

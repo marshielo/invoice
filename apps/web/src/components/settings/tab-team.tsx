@@ -8,7 +8,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useTranslations } from 'next-intl'
 import { apiClient } from '@/lib/api-client'
 import { PLAN_LIMITS } from '@invoicein/shared/constants'
-import type { ApiResponse, UserData, UsersListData } from '@/lib/types'
+import type { ApiResponse, UsersListData } from '@/lib/types'
 
 const inputCls =
   'mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm placeholder:text-gray-400 focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 disabled:bg-gray-50'
@@ -35,11 +35,6 @@ const STATUS_BADGE: Record<string, string> = {
   active: 'bg-green-100 text-green-700',
   inactive: 'bg-gray-100 text-gray-500',
   pending: 'bg-yellow-100 text-yellow-700',
-}
-
-function userStatus(user: UserData): 'active' | 'inactive' | 'pending' {
-  if (!user.isActive) return user.createdAt === user.createdAt ? 'inactive' : 'inactive'
-  return user.isActive ? 'active' : 'inactive'
 }
 
 function getPlanKey(plan: string): keyof typeof PLAN_LIMITS {

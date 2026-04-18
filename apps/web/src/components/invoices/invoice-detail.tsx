@@ -11,7 +11,6 @@ import { apiClient } from '@/lib/api-client'
 import { useToken } from '@/hooks/use-token'
 import type {
   InvoiceData,
-  InvoicePaymentData,
   InvoiceStatus,
 } from './invoice-types'
 import {

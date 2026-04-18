@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "expo start",
     "ios": "expo run:ios",
-    "build": "eas build --platform ios",
+    "build": "tsc --noEmit",
+    "build:ios": "eas build --platform ios",
     "lint": "eslint app/",
     "type-check": "tsc --noEmit"
   },
@@ -23,6 +24,7 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
+    "@invoicein/eslint-config": "workspace:*",
     "@invoicein/tsconfig": "workspace:*",
     "@types/react": "~18.3.0",
     "typescript": "^5.8.3"

@@ -4,6 +4,10 @@ import createNextIntlPlugin from 'next-intl/plugin'
 const withNextIntl = createNextIntlPlugin('./src/i18n/config.ts')
 
 const nextConfig: NextConfig = {
+  eslint: {
+    // ESLint is run as a separate CI step (pnpm lint); skip during next build
+    ignoreDuringBuilds: true,
+  },
   transpilePackages: ['@invoicein/shared'],
   experimental: {
     optimizePackageImports: ['@invoicein/ui', 'lucide-react'],

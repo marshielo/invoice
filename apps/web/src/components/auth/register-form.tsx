@@ -6,7 +6,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useTranslations } from 'next-intl'
 import { createClient } from '@/lib/supabase/client'
-import { useRouter } from '@/lib/navigation'
 import { Link } from '@/lib/navigation'
 
 type RegisterFormData = {
@@ -42,7 +41,6 @@ function mapSupabaseError(message: string, t: (key: string) => string): string {
 
 export function RegisterForm() {
   const t = useTranslations('auth')
-  const router = useRouter()
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [isGoogleLoading, setIsGoogleLoading] = useState(false)

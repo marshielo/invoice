@@ -8,7 +8,6 @@ import { getSupabaseAdmin } from '~/lib/supabase'
 import { authMiddleware } from '~/middleware/auth.middleware'
 import { tenantMiddleware } from '~/middleware/tenant.middleware'
 import { createTenant, getTenantByUserId } from '~/services/tenants.service'
-import { NotFoundError } from '~/lib/errors'
 import type { AppEnv } from '~/types/context'
 
 export const tenantRoutes = new Hono<AppEnv>()
