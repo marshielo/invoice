@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/jackc/pgx/v5/stdlib"
@@ -33,7 +34,16 @@ func main() {
 	}
 
 	// 3. Connect to PostgreSQL (Supabase)
-	db, err := sql.Open("pgx", cfg.DatabaseURL)
+	// Use simple_protocol to avoid pgx v5 prepared-statement cache conflicts
+	// (SQLSTATE 42P05 "prepared statement already exists") on Supabase's
+	// PgBouncer connection pool, which reuses backend sessions.
+	dbURL := cfg.DatabaseURL
+	if strings.Contains(dbURL, "?") {
+		dbURL += "&default_query_exec_mode=simple_protocol"
+	} else {
+		dbURL += "?default_query_exec_mode=simple_protocol"
+	}
+	db, err := sql.Open("pgx", dbURL)
 	if err != nil {
 		log.Fatalf("failed to open database: %v", err)
 	}
