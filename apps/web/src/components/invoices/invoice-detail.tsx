@@ -43,6 +43,7 @@ export default function InvoiceDetail({ invoiceId }: { invoiceId: string }) {
   const [showPaymentForm, setShowPaymentForm] = useState(false)
   const [deletePaymentId, setDeletePaymentId] = useState<string | null>(null)
   const [actionError, setActionError] = useState<string | null>(null)
+  const [whatsappSuccess, setWhatsappSuccess] = useState(false)
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['invoice', invoiceId, token],
@@ -73,6 +74,20 @@ export default function InvoiceDetail({ invoiceId }: { invoiceId: string }) {
       qc.invalidateQueries({ queryKey: ['invoices'] })
     },
     onError: () => setActionError('Gagal membatalkan invoice.'),
+  })
+
+  const whatsappMutation = useMutation({
+    mutationFn: () =>
+      apiClient.post(`/api/v1/invoices/${invoiceId}/send-whatsapp`, {}, token ?? undefined),
+    onSuccess: () => {
+      setActionError(null)
+      setWhatsappSuccess(true)
+      setTimeout(() => setWhatsappSuccess(false), 4000)
+    },
+    onError: (err) => {
+      const msg = err instanceof Error ? err.message : 'Gagal mengirim WhatsApp.'
+      setActionError(msg)
+    },
   })
 
   // ─── Payment form ──────────────────────────────────────────────────────────
@@ -138,6 +153,7 @@ export default function InvoiceDetail({ invoiceId }: { invoiceId: string }) {
   const canSend = inv.status === 'draft'
   const canCancel = inv.status === 'sent' || inv.status === 'partial'
   const canPay = inv.status === 'sent' || inv.status === 'partial'
+  const canWhatsApp = inv.status === 'sent' || inv.status === 'partial'
 
   const inputCls = 'mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm placeholder:text-gray-400 focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500'
   const labelCls = 'block text-sm font-medium text-gray-700'
@@ -182,6 +198,15 @@ export default function InvoiceDetail({ invoiceId }: { invoiceId: string }) {
               {cancelMutation.isPending ? 'Membatalkan...' : 'Batalkan'}
             </button>
           )}
+          {canWhatsApp && (
+            <button
+              onClick={() => whatsappMutation.mutate()}
+              disabled={whatsappMutation.isPending}
+              className="rounded-lg border border-green-300 bg-green-50 px-4 py-2 text-sm font-medium text-green-700 hover:bg-green-100 disabled:opacity-60"
+            >
+              {whatsappMutation.isPending ? 'Mengirim...' : '💬 WhatsApp'}
+            </button>
+          )}
           {inv.pdfUrl && (
             <a
               href={inv.pdfUrl}
@@ -195,6 +220,11 @@ export default function InvoiceDetail({ invoiceId }: { invoiceId: string }) {
         </div>
       </div>
 
+      {whatsappSuccess && (
+        <p className="mb-4 rounded-lg bg-green-50 px-4 py-3 text-sm text-green-700">
+          ✅ Pesan WhatsApp berhasil dikirim ke pelanggan.
+        </p>
+      )}
       {actionError && (
         <p className="mb-4 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">{actionError}</p>
       )}

@@ -158,6 +158,7 @@ func New(deps Deps) *gin.Engine {
 		invoices.POST("/:id/pdf", deps.InvoiceController.GeneratePDF)
 		invoices.POST("/:id/payments", deps.InvoiceController.CreatePayment)
 		invoices.DELETE("/:id/payments/:payment_id", deps.InvoiceController.DeletePayment)
+		invoices.POST("/:id/send-whatsapp", deps.InvoiceController.SendWhatsApp)
 	}
 
 	// --- AI ---

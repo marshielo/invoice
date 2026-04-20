@@ -15,6 +15,7 @@ import (
 	"github.com/invoicein/api-go/internal/router"
 	"github.com/invoicein/api-go/internal/service"
 	"github.com/invoicein/api-go/pkg/anthropic"
+	"github.com/invoicein/api-go/pkg/fonnte"
 	"github.com/invoicein/api-go/pkg/supabase"
 	customvalidator "github.com/invoicein/api-go/pkg/validator"
 )
@@ -74,6 +75,12 @@ func main() {
 	// 7. Wire Anthropic client
 	anthropicClient := anthropic.NewClient(cfg.AnthropicAPIKey)
 
+	// 7b. Wire Fonnte client (optional — nil if API key not set)
+	var fonnteClient *fonnte.Client
+	if cfg.FonnteAPIKey != "" {
+		fonnteClient = fonnte.NewClient(cfg.FonnteAPIKey)
+	}
+
 	// 8. Wire services
 	authService := service.NewAuthService(userRepo)
 	tenantService := service.NewTenantService(tenantRepo, userRepo, db, sb)
@@ -85,6 +92,10 @@ func main() {
 	invoiceService := service.NewInvoiceService(invoiceRepo)
 	invoicePDFService := service.NewInvoicePDFService(invoiceRepo, tenantRepo, storageRepo)
 	aiService := service.NewAIService(anthropicClient, tenantRepo, clientRepo, productRepo)
+	var whatsappService *service.WhatsAppService
+	if fonnteClient != nil {
+		whatsappService = service.NewWhatsAppService(fonnteClient, invoiceRepo, invoicePDFService)
+	}
 
 	// 9. Wire controllers
 	healthCtrl := controller.NewHealthController(cfg.Environment)
@@ -95,7 +106,7 @@ func main() {
 	uploadCtrl := controller.NewUploadController(storageService)
 	clientCtrl := controller.NewClientController(clientService)
 	productCtrl := controller.NewProductController(productService)
-	invoiceCtrl := controller.NewInvoiceController(invoiceService, invoicePDFService)
+	invoiceCtrl := controller.NewInvoiceController(invoiceService, invoicePDFService, whatsappService)
 	aiCtrl := controller.NewAIController(aiService)
 
 	// 10. Register custom validators

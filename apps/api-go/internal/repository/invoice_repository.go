@@ -526,6 +526,58 @@ func (r *InvoiceRepository) FindPayment(ctx context.Context, paymentID, invoiceI
 	return &p, err
 }
 
+// WhatsAppInvoiceInfo holds the minimal data needed to send a WhatsApp message.
+type WhatsAppInvoiceInfo struct {
+	InvoiceNumber string
+	Status        string
+	Total         string
+	DueDate       *string
+	PDFURL        *string
+	TenantName    string
+	ClientPhone   *string
+	ClientName    *string
+}
+
+// FindForWhatsApp returns a lightweight view of the invoice with client phone
+// and tenant name for WhatsApp dispatch. Returns (nil, nil) if not found.
+func (r *InvoiceRepository) FindForWhatsApp(ctx context.Context, invoiceID, tenantID string) (*WhatsAppInvoiceInfo, error) {
+	const q = `
+		SELECT i.invoice_number, i.status, i.total, i.due_date, i.pdf_url,
+		       t.name AS tenant_name,
+		       c.phone AS client_phone, c.name AS client_name
+		FROM invoices i
+		JOIN tenants t ON t.id = i.tenant_id
+		LEFT JOIN clients c ON c.id = i.client_id
+		WHERE i.id = $1 AND i.tenant_id = $2`
+
+	var info WhatsAppInvoiceInfo
+	var dueDate, pdfURL, clientPhone, clientName sql.NullString
+	err := r.db.QueryRowContext(ctx, q, invoiceID, tenantID).Scan(
+		&info.InvoiceNumber, &info.Status, &info.Total, &dueDate, &pdfURL,
+		&info.TenantName,
+		&clientPhone, &clientName,
+	)
+	if err == sql.ErrNoRows {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, fmt.Errorf("find invoice for whatsapp: %w", err)
+	}
+	if dueDate.Valid {
+		info.DueDate = &dueDate.String
+	}
+	if pdfURL.Valid {
+		info.PDFURL = &pdfURL.String
+	}
+	if clientPhone.Valid {
+		info.ClientPhone = &clientPhone.String
+	}
+	if clientName.Valid {
+		info.ClientName = &clientName.String
+	}
+	return &info, nil
+}
+
 // ─── scan helper ──────────────────────────────────────────────────────────────
 
 func scanInvoiceData(row *sql.Row) (*model.InvoiceData, error) {

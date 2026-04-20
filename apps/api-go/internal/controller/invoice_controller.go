@@ -14,13 +14,14 @@ import (
 
 // InvoiceController handles invoice-related endpoints.
 type InvoiceController struct {
-	svc    *service.InvoiceService
-	pdfSvc *service.InvoicePDFService
+	svc       *service.InvoiceService
+	pdfSvc    *service.InvoicePDFService
+	waSvc     *service.WhatsAppService
 }
 
 // NewInvoiceController creates a new InvoiceController.
-func NewInvoiceController(svc *service.InvoiceService, pdfSvc *service.InvoicePDFService) *InvoiceController {
-	return &InvoiceController{svc: svc, pdfSvc: pdfSvc}
+func NewInvoiceController(svc *service.InvoiceService, pdfSvc *service.InvoicePDFService, waSvc *service.WhatsAppService) *InvoiceController {
+	return &InvoiceController{svc: svc, pdfSvc: pdfSvc, waSvc: waSvc}
 }
 
 // ─── List ─────────────────────────────────────────────────────────────────────
@@ -288,4 +289,35 @@ func (ic *InvoiceController) DeletePayment(c *gin.Context) {
 	}
 
 	response.Success(c, inv)
+}
+
+// SendWhatsApp handles POST /api/v1/invoices/:id/send-whatsapp.
+func (ic *InvoiceController) SendWhatsApp(c *gin.Context) {
+	tenantID := c.GetString(middleware.CtxTenantID)
+	invoiceID := c.Param("id")
+
+	if ic.waSvc == nil {
+		response.InternalError(c, "Layanan WhatsApp tidak dikonfigurasi")
+		return
+	}
+
+	if err := ic.waSvc.SendInvoiceWhatsApp(c.Request.Context(), invoiceID, tenantID); err != nil {
+		switch e := err.(type) {
+		case *service.NotFoundError:
+			response.NotFound(c, e.Resource)
+		case *service.ConflictError:
+			response.Conflict(c, e.Message)
+		case *service.ValidationError:
+			response.BadRequest(c, e.Message)
+		default:
+			log.Printf("[SendWhatsApp] error for invoice %s: %v", invoiceID, err)
+			response.InternalError(c, "Gagal mengirim WhatsApp")
+		}
+		return
+	}
+
+	c.JSON(http.StatusOK, model.APIResponse{
+		Success: true,
+		Data:    map[string]string{"message": "WhatsApp terkirim"},
+	})
 }
