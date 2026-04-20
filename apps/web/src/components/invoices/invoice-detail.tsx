@@ -43,6 +43,8 @@ export default function InvoiceDetail({ invoiceId }: { invoiceId: string }) {
   const [showPaymentForm, setShowPaymentForm] = useState(false)
   const [deletePaymentId, setDeletePaymentId] = useState<string | null>(null)
   const [actionError, setActionError] = useState<string | null>(null)
+  const [paymentLink, setPaymentLink] = useState<{ redirectUrl: string; orderID: string } | null>(null)
+  const [linkCopied, setLinkCopied] = useState(false)
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['invoice', invoiceId, token],
@@ -121,6 +123,29 @@ export default function InvoiceDetail({ invoiceId }: { invoiceId: string }) {
   })
 
   const onPaymentSubmit = handlePaymentSubmit((values) => createPaymentMutation.mutate(values))
+
+  // ─── Midtrans payment link ─────────────────────────────────────────────────
+
+  const paymentLinkMutation = useMutation({
+    mutationFn: () =>
+      apiClient.post<{ success: boolean; data: { snap_token: string; redirect_url: string; order_id: string } }>(
+        `/api/v1/invoices/${invoiceId}/payment-link`,
+        {},
+        token ?? undefined,
+      ),
+    onSuccess: (res) => {
+      setPaymentLink({ redirectUrl: res.data.redirect_url, orderID: res.data.order_id })
+      setActionError(null)
+    },
+    onError: () => setActionError('Gagal membuat link pembayaran.'),
+  })
+
+  const handleCopyLink = () => {
+    if (!paymentLink) return
+    void navigator.clipboard.writeText(paymentLink.redirectUrl)
+    setLinkCopied(true)
+    setTimeout(() => setLinkCopied(false), 2000)
+  }
 
   // ─── Render helpers ────────────────────────────────────────────────────────
 
@@ -341,6 +366,64 @@ export default function InvoiceDetail({ invoiceId }: { invoiceId: string }) {
               </button>
             )}
           </div>
+
+          {/* Midtrans payment link */}
+          {canPay && (
+            <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+              <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">Link Pembayaran Midtrans</p>
+
+              {paymentLink ? (
+                <div className="mt-3 space-y-3">
+                  {/* QR Code */}
+                  <div className="flex justify-center">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={`https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(paymentLink.redirectUrl)}`}
+                      alt="QR Code Pembayaran"
+                      className="rounded-lg border border-gray-200"
+                      width={160}
+                      height={160}
+                    />
+                  </div>
+                  {/* URL */}
+                  <div className="rounded-lg bg-gray-50 px-3 py-2 text-xs text-gray-600 break-all">
+                    {paymentLink.redirectUrl}
+                  </div>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={handleCopyLink}
+                      className="flex-1 rounded-lg border border-gray-300 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50"
+                    >
+                      {linkCopied ? '✓ Tersalin' : 'Salin Link'}
+                    </button>
+                    <a
+                      href={paymentLink.redirectUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex-1 rounded-lg bg-green-600 py-1.5 text-center text-xs font-medium text-white hover:bg-green-700"
+                    >
+                      Buka ↗
+                    </a>
+                  </div>
+                  <button
+                    onClick={() => paymentLinkMutation.mutate()}
+                    disabled={paymentLinkMutation.isPending}
+                    className="w-full text-xs text-gray-400 hover:text-gray-600 disabled:opacity-60"
+                  >
+                    Buat link baru
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={() => paymentLinkMutation.mutate()}
+                  disabled={paymentLinkMutation.isPending}
+                  className="mt-3 w-full rounded-lg border border-sky-300 bg-sky-50 py-2 text-sm font-medium text-sky-700 hover:bg-sky-100 disabled:opacity-60"
+                >
+                  {paymentLinkMutation.isPending ? 'Membuat...' : '🔗 Buat Link Midtrans'}
+                </button>
+              )}
+            </div>
+          )}
 
           {/* Payment history */}
           {inv.payments.length > 0 && (
