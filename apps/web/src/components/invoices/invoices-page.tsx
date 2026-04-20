@@ -17,6 +17,7 @@ import {
   formatRupiah,
   formatDate,
 } from './invoice-types'
+import AIInvoiceDialog from './ai-invoice-dialog'
 
 interface ApiResponse<T> {
   success: boolean
@@ -49,6 +50,7 @@ export default function InvoicesPage() {
   const [page, setPage] = useState(1)
   const [deleting, setDeleting] = useState<InvoiceListItem | null>(null)
   const [deleteError, setDeleteError] = useState<string | null>(null)
+  const [showAIDialog, setShowAIDialog] = useState(false)
 
   const params = new URLSearchParams({
     page: String(page),
@@ -99,12 +101,20 @@ export default function InvoicesPage() {
           <h1 className="text-2xl font-bold text-gray-900">Invoice</h1>
           <p className="mt-1 text-sm text-gray-500">Kelola tagihan dan pembayaran bisnis Anda</p>
         </div>
-        <Link
-          href="/invoices/new"
-          className="rounded-lg bg-sky-600 px-4 py-2 text-sm font-medium text-white hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
-        >
-          + Buat Invoice
-        </Link>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setShowAIDialog(true)}
+            className="rounded-lg border border-sky-300 bg-sky-50 px-4 py-2 text-sm font-medium text-sky-700 hover:bg-sky-100 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
+          >
+            ✨ Buat dengan AI
+          </button>
+          <Link
+            href="/invoices/new"
+            className="rounded-lg bg-sky-600 px-4 py-2 text-sm font-medium text-white hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
+          >
+            + Buat Invoice
+          </Link>
+        </div>
       </div>
 
       {/* Status tabs */}
@@ -254,6 +264,9 @@ export default function InvoicesPage() {
           </div>
         </div>
       )}
+
+      {/* AI Invoice Dialog */}
+      {showAIDialog && <AIInvoiceDialog onClose={() => setShowAIDialog(false)} />}
 
       {/* Delete confirm */}
       {deleting && (
