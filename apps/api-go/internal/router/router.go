@@ -23,6 +23,7 @@ type Deps struct {
 	ClientController         *controller.ClientController
 	ProductController        *controller.ProductController
 	InvoiceController        *controller.InvoiceController
+	AIController             *controller.AIController
 	UserRepository           *repository.UserRepository
 }
 
@@ -157,6 +158,15 @@ func New(deps Deps) *gin.Engine {
 		invoices.POST("/:id/pdf", deps.InvoiceController.GeneratePDF)
 		invoices.POST("/:id/payments", deps.InvoiceController.CreatePayment)
 		invoices.DELETE("/:id/payments/:payment_id", deps.InvoiceController.DeletePayment)
+	}
+
+	// --- AI ---
+	ai := api.Group("/ai")
+	ai.Use(authMW)
+	ai.Use(tenantMW)
+	ai.Use(middleware.AIRateLimit)
+	{
+		ai.POST("/generate-invoice", deps.AIController.GenerateInvoice)
 	}
 
 	return r

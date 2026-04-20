@@ -14,6 +14,7 @@ import (
 	"github.com/invoicein/api-go/internal/repository"
 	"github.com/invoicein/api-go/internal/router"
 	"github.com/invoicein/api-go/internal/service"
+	"github.com/invoicein/api-go/pkg/anthropic"
 	"github.com/invoicein/api-go/pkg/supabase"
 	customvalidator "github.com/invoicein/api-go/pkg/validator"
 )
@@ -70,7 +71,10 @@ func main() {
 	productRepo := repository.NewProductRepository(db)
 	invoiceRepo := repository.NewInvoiceRepository(db)
 
-	// 7. Wire services
+	// 7. Wire Anthropic client
+	anthropicClient := anthropic.NewClient(cfg.AnthropicAPIKey)
+
+	// 8. Wire services
 	authService := service.NewAuthService(userRepo)
 	tenantService := service.NewTenantService(tenantRepo, userRepo, db, sb)
 	tenantSettingsService := service.NewTenantSettingsService(tenantRepo, storageRepo)
@@ -80,8 +84,9 @@ func main() {
 	productService := service.NewProductService(productRepo)
 	invoiceService := service.NewInvoiceService(invoiceRepo)
 	invoicePDFService := service.NewInvoicePDFService(invoiceRepo, tenantRepo, storageRepo)
+	aiService := service.NewAIService(anthropicClient, tenantRepo, clientRepo, productRepo)
 
-	// 8. Wire controllers
+	// 9. Wire controllers
 	healthCtrl := controller.NewHealthController(cfg.Environment)
 	authCtrl := controller.NewAuthController(authService)
 	tenantCtrl := controller.NewTenantController(tenantService)
@@ -91,11 +96,12 @@ func main() {
 	clientCtrl := controller.NewClientController(clientService)
 	productCtrl := controller.NewProductController(productService)
 	invoiceCtrl := controller.NewInvoiceController(invoiceService, invoicePDFService)
+	aiCtrl := controller.NewAIController(aiService)
 
-	// 9. Register custom validators
+	// 10. Register custom validators
 	customvalidator.RegisterCustomValidators()
 
-	// 10. Build router
+	// 11. Build router
 	r := router.New(router.Deps{
 		SupabaseClient:           sb,
 		HealthController:         healthCtrl,
@@ -107,10 +113,11 @@ func main() {
 		ClientController:         clientCtrl,
 		ProductController:        productCtrl,
 		InvoiceController:        invoiceCtrl,
+		AIController:             aiCtrl,
 		UserRepository:           userRepo,
 	})
 
-	// 11. Start server
+	// 12. Start server
 	addr := fmt.Sprintf(":%s", cfg.Port)
 	log.Printf("🚀 Invoicein API (Go) starting on %s [%s]", addr, cfg.Environment)
 	if err := r.Run(addr); err != nil {
