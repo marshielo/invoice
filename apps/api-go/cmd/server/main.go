@@ -14,6 +14,7 @@ import (
 	"github.com/invoicein/api-go/internal/repository"
 	"github.com/invoicein/api-go/internal/router"
 	"github.com/invoicein/api-go/internal/service"
+	"github.com/invoicein/api-go/pkg/midtrans"
 	"github.com/invoicein/api-go/pkg/supabase"
 	customvalidator "github.com/invoicein/api-go/pkg/validator"
 )
@@ -69,8 +70,12 @@ func main() {
 	clientRepo := repository.NewClientRepository(db)
 	productRepo := repository.NewProductRepository(db)
 	invoiceRepo := repository.NewInvoiceRepository(db)
+	midtransRepo := repository.NewMidtransRepository(db)
 
-	// 7. Wire services
+	// 7. Wire Midtrans client
+	midtransClient := midtrans.NewClient(cfg.MidtransServerKey, cfg.MidtransIsProd)
+
+	// 8. Wire services
 	authService := service.NewAuthService(userRepo)
 	tenantService := service.NewTenantService(tenantRepo, userRepo, db, sb)
 	tenantSettingsService := service.NewTenantSettingsService(tenantRepo, storageRepo)
@@ -80,8 +85,9 @@ func main() {
 	productService := service.NewProductService(productRepo)
 	invoiceService := service.NewInvoiceService(invoiceRepo)
 	invoicePDFService := service.NewInvoicePDFService(invoiceRepo, tenantRepo, storageRepo)
+	midtransService := service.NewMidtransService(midtransRepo, invoiceRepo, midtransClient)
 
-	// 8. Wire controllers
+	// 9. Wire controllers
 	healthCtrl := controller.NewHealthController(cfg.Environment)
 	authCtrl := controller.NewAuthController(authService)
 	tenantCtrl := controller.NewTenantController(tenantService)
@@ -91,11 +97,12 @@ func main() {
 	clientCtrl := controller.NewClientController(clientService)
 	productCtrl := controller.NewProductController(productService)
 	invoiceCtrl := controller.NewInvoiceController(invoiceService, invoicePDFService)
+	midtransCtrl := controller.NewMidtransController(midtransService)
 
-	// 9. Register custom validators
+	// 10. Register custom validators
 	customvalidator.RegisterCustomValidators()
 
-	// 10. Build router
+	// 11. Build router
 	r := router.New(router.Deps{
 		SupabaseClient:           sb,
 		HealthController:         healthCtrl,
@@ -107,10 +114,11 @@ func main() {
 		ClientController:         clientCtrl,
 		ProductController:        productCtrl,
 		InvoiceController:        invoiceCtrl,
+		MidtransController:       midtransCtrl,
 		UserRepository:           userRepo,
 	})
 
-	// 11. Start server
+	// 12. Start server
 	addr := fmt.Sprintf(":%s", cfg.Port)
 	log.Printf("🚀 Invoicein API (Go) starting on %s [%s]", addr, cfg.Environment)
 	if err := r.Run(addr); err != nil {

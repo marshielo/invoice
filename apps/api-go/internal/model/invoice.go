@@ -46,13 +46,33 @@ type InvoiceItem struct {
 type InvoicePayment struct {
 	ID              string    `json:"id" db:"id"`
 	InvoiceID       string    `json:"invoice_id" db:"invoice_id"`
+	TenantID        string    `json:"tenant_id" db:"tenant_id"`
 	Amount          string    `json:"amount" db:"amount"`
 	PaymentMethod   *string   `json:"payment_method,omitempty" db:"payment_method"`
 	PaymentDate     time.Time `json:"payment_date" db:"payment_date"`
 	ReferenceNumber *string   `json:"reference_number,omitempty" db:"reference_number"`
 	ProofURL        *string   `json:"proof_url,omitempty" db:"proof_url"`
 	Notes           *string   `json:"notes,omitempty" db:"notes"`
+	RecordedBy      *string   `json:"recorded_by,omitempty" db:"recorded_by"`
 	CreatedAt       time.Time `json:"created_at" db:"created_at"`
+	UpdatedAt       time.Time `json:"updated_at" db:"updated_at"`
+}
+
+// MidtransTransaction represents the midtrans_transactions table.
+type MidtransTransaction struct {
+	ID               string  `json:"id" db:"id"`
+	InvoiceID        string  `json:"invoice_id" db:"invoice_id"`
+	TenantID         string  `json:"tenant_id" db:"tenant_id"`
+	OrderID          string  `json:"order_id" db:"order_id"`
+	SnapToken        *string `json:"snap_token,omitempty" db:"snap_token"`
+	SnapRedirectURL  *string `json:"snap_redirect_url,omitempty" db:"snap_redirect_url"`
+	TransactionID    *string `json:"transaction_id,omitempty" db:"transaction_id"`
+	PaymentType      *string `json:"payment_type,omitempty" db:"payment_type"`
+	GrossAmount      string  `json:"gross_amount" db:"gross_amount"`
+	Status           string  `json:"status" db:"status"`
+	FraudStatus      *string `json:"fraud_status,omitempty" db:"fraud_status"`
+	CreatedAt        string  `json:"created_at" db:"created_at"`
+	UpdatedAt        string  `json:"updated_at" db:"updated_at"`
 }
 
 // ─── Request DTOs ─────────────────────────────────────────────────────────────
