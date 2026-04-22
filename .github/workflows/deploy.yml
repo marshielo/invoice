@@ -8,13 +8,20 @@ concurrency:
   group: deploy-${{ github.ref }}
   cancel-in-progress: false   # never cancel a production deploy
 
+# Web (Next.js) is deployed automatically by Vercel's GitHub App integration
+# on every push to main — no CI job needed here.
+#
+# Railway (Go API) auto-deploys via its GitHub integration as well.
+# This workflow is kept as a placeholder for future CI steps (lint, tests, etc.)
+
 jobs:
-  # ── Deploy Web (Cloudflare Pages) ───────────────────────
-  deploy-web:
-    name: Deploy Web → Cloudflare Pages
+  # ── Placeholder ─────────────────────────────────────────────────────────────
+  # Both Railway and Vercel have native GitHub integrations that watch `main`
+  # and deploy automatically. Add lint / test jobs here as needed.
+  ci:
+    name: CI
     runs-on: ubuntu-latest
-    timeout-minutes: 15
-    environment: production
+    timeout-minutes: 10
 
     steps:
       - name: Checkout
@@ -32,28 +39,5 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build web app
-        run: pnpm turbo build --filter=@invoicein/web
-        env:
-          NEXT_PUBLIC_API_URL: https://invoice-production-da66.up.railway.app
-          NEXT_PUBLIC_APP_URL: https://invoicein-web.pages.dev
-          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
-
-      - name: Create Cloudflare Pages project (idempotent)
-        run: pnpm dlx wrangler pages project create invoicein-web --production-branch=main || true
-        working-directory: apps/web
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-
-      - name: Remove build cache (exceeds CF Pages 25 MiB limit)
-        run: rm -rf .next/cache
-        working-directory: apps/web
-
-      - name: Deploy to Cloudflare Pages
-        run: pnpm dlx wrangler pages deploy .next --project-name=invoicein-web --branch=main
-        working-directory: apps/web
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      - name: Type-check
+        run: pnpm turbo type-check
