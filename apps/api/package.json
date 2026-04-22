@@ -9,7 +9,7 @@
     "deploy": "wrangler deploy",
     "lint": "eslint src/",
     "type-check": "tsc --noEmit",
-    "test": "vitest run",
+    "test": "vitest run --passWithNoTests",
     "test:watch": "vitest"
   },
   "dependencies": {
@@ -28,6 +28,7 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250409.0",
+    "@invoicein/eslint-config": "workspace:*",
     "@invoicein/tsconfig": "workspace:*",
     "typescript": "^5.8.3",
     "vitest": "^3.1.1",

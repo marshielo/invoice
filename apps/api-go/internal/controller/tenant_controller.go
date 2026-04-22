@@ -2,6 +2,7 @@ package controller
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -51,6 +52,7 @@ func (t *TenantController) CreateTenant(c *gin.Context) {
 		case *service.ConflictError:
 			response.Conflict(c, e.Message)
 		default:
+			log.Printf("[CreateTenant] error: %v", err)
 			response.InternalError(c, "Gagal membuat tenant")
 		}
 		return

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { generateInvoiceNumber } from '../invoice-number.js'
+import { generateInvoiceNumber } from '../invoice-number'
 
 describe('generateInvoiceNumber', () => {
   const date = new Date('2026-04-09')

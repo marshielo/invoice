@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { calculateInvoiceTotals, calculateLineTotal, calculatePPN } from '../tax.js'
+import { calculateInvoiceTotals, calculateLineTotal, calculatePPN } from '../tax'
 
 describe('calculatePPN', () => {
   it('calculates 11% PPN', () => expect(calculatePPN(1000000)).toBe(110000))

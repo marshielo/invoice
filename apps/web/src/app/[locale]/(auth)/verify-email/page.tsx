@@ -16,10 +16,14 @@ export default async function VerifyEmailPage({
   const { email } = await searchParams
 
   return (
-    <div className="rounded-xl bg-white p-8 shadow-sm ring-1 ring-gray-200 text-center">
-      <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-sky-100">
+    <div className="rounded-2xl border border-border bg-white p-8 shadow-sm text-center">
+      <div
+        className="mx-auto mb-5 flex h-12 w-12 items-center justify-center rounded-full"
+        style={{ background: 'hsl(152 26% 90%)' }}
+      >
         <svg
-          className="h-6 w-6 text-sky-600"
+          className="h-6 w-6"
+          style={{ color: 'hsl(152 26% 36%)' }}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -33,15 +37,19 @@ export default async function VerifyEmailPage({
           />
         </svg>
       </div>
-      <h1 className="text-xl font-bold text-gray-900">{t('checkEmailTitle')}</h1>
-      <p className="mt-2 text-sm text-gray-500">
+      <h1 className="font-display text-xl font-bold text-foreground">{t('checkEmailTitle')}</h1>
+      <p className="mt-2 text-sm text-muted-foreground" style={{ lineHeight: 1.7 }}>
         {email
           ? t('checkEmailSubtitle', { email })
           : t('checkEmailSubtitle', { email: 'email Anda' })}
       </p>
-      <p className="mt-6 text-xs text-gray-400">
+      <p className="mt-6 text-xs text-muted-foreground">
         {t('hasAccount')}{' '}
-        <Link href="/login" className="font-medium text-sky-600 hover:underline">
+        <Link
+          href="/login"
+          className="font-semibold transition-colors hover:opacity-70"
+          style={{ color: 'hsl(158 68% 28%)' }}
+        >
           {t('login')}
         </Link>
       </p>

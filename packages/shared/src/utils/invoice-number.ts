@@ -1,4 +1,4 @@
-import { INVOICE_SEQ_PADDING } from '../constants/index.js'
+import { INVOICE_SEQ_PADDING } from '../constants/index'
 
 /**
  * Generate an invoice number from a format template.

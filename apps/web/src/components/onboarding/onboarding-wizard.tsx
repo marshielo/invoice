@@ -48,7 +48,7 @@ const businessInfoSchema = z.object({
     .string()
     .min(3)
     .regex(/^[a-z0-9-]+$/),
-  businessType: z.enum(['individual', 'cv', 'pt', 'ud', 'other']),
+  businessType: z.enum(['florist', 'freelancer', 'workshop', 'retail', 'food_beverage', 'fashion', 'service', 'other']),
   email: z.string().email(),
   phone: z.string().optional(),
 })
@@ -168,7 +168,7 @@ function StepBusinessInfo({
     formState: { errors },
   } = useForm<BusinessInfoForm>({
     resolver: zodResolver(businessInfoSchema),
-    defaultValues: { businessType: 'individual', invoicePrefix: 'INV' } as Partial<BusinessInfoForm>,
+    defaultValues: { businessType: 'other', invoicePrefix: 'INV' } as Partial<BusinessInfoForm>,
   })
 
   const nameValue = watch('name')
@@ -271,7 +271,7 @@ function StepBusinessInfo({
             className={inputCls}
             disabled={mutation.isPending}
           >
-            {(['individual', 'cv', 'pt', 'ud', 'other'] as const).map((type) => (
+            {(['florist', 'freelancer', 'workshop', 'retail', 'food_beverage', 'fashion', 'service', 'other'] as const).map((type) => (
               <option key={type} value={type}>
                 {t(`businessInfo.businessTypes.${type}`)}
               </option>

@@ -13,6 +13,42 @@ env:
   TURBO_TEAM: ${{ vars.TURBO_TEAM }}
 
 jobs:
+  # ── Deploy API-Go (Docker → GHCR → Railway) ─────────────
+  deploy-api-go:
+    name: Deploy API-Go → Railway
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: production
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: apps/api-go
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}/api-go:latest
+            ghcr.io/${{ github.repository }}/api-go:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Trigger Railway redeploy
+        if: ${{ secrets.RAILWAY_DEPLOY_HOOK_URL != '' }}
+        run: curl -s -X POST "${{ secrets.RAILWAY_DEPLOY_HOOK_URL }}"
+
   # ── Deploy API (Cloudflare Workers) ─────────────────────
   deploy-api:
     name: Deploy API → Cloudflare Workers
@@ -26,8 +62,6 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 9
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -79,7 +113,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     environment: production
-    needs: deploy-api   # deploy API first so web can reference it
+    needs: [deploy-api-go, deploy-api]   # deploy both APIs first so web can reference them
 
     steps:
       - name: Checkout
@@ -87,8 +121,6 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 9
 
       - name: Setup Node.js
         uses: actions/setup-node@v4

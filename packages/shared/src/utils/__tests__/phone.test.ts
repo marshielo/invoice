@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { formatIndonesianPhone, validateWANumber } from '../phone.js'
+import { formatIndonesianPhone, validateWANumber } from '../phone'
 
 describe('formatIndonesianPhone', () => {
   it('converts leading 0 to +62', () =>

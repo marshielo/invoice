@@ -17,6 +17,7 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
+    "@invoicein/eslint-config": "workspace:*",
     "@invoicein/tsconfig": "workspace:*",
     "typescript": "^5.8.3"
   }
