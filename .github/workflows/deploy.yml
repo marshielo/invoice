@@ -47,6 +47,10 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
+      - name: Remove build cache (exceeds CF Pages 25 MiB limit)
+        run: rm -rf .next/cache
+        working-directory: apps/web
+
       - name: Deploy to Cloudflare Pages
         run: pnpm dlx wrangler pages deploy .next --project-name=invoicein-web --branch=main
         working-directory: apps/web
