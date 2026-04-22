@@ -23,6 +23,7 @@ type Deps struct {
 	ClientController         *controller.ClientController
 	ProductController        *controller.ProductController
 	InvoiceController        *controller.InvoiceController
+	AIController             *controller.AIController
 	MidtransController       *controller.MidtransController
 	UserRepository           *repository.UserRepository
 }
@@ -159,6 +160,7 @@ func New(deps Deps) *gin.Engine {
 		invoices.GET("/:id/payments", deps.InvoiceController.GetPayments)
 		invoices.POST("/:id/payments", deps.InvoiceController.CreatePayment)
 		invoices.DELETE("/:id/payments/:payment_id", deps.InvoiceController.DeletePayment)
+		invoices.POST("/:id/send-whatsapp", deps.InvoiceController.SendWhatsApp)
 		invoices.POST("/:id/payment-link", deps.MidtransController.CreatePaymentLink)
 	}
 
@@ -166,6 +168,15 @@ func New(deps Deps) *gin.Engine {
 	webhooks := api.Group("/webhooks")
 	{
 		webhooks.POST("/midtrans", deps.MidtransController.WebhookHandler)
+	}
+
+	// --- AI ---
+	ai := api.Group("/ai")
+	ai.Use(authMW)
+	ai.Use(tenantMW)
+	ai.Use(middleware.AIRateLimit)
+	{
+		ai.POST("/generate-invoice", deps.AIController.GenerateInvoice)
 	}
 
 	return r

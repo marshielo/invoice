@@ -14,6 +14,8 @@ import (
 	"github.com/invoicein/api-go/internal/repository"
 	"github.com/invoicein/api-go/internal/router"
 	"github.com/invoicein/api-go/internal/service"
+	"github.com/invoicein/api-go/pkg/anthropic"
+	"github.com/invoicein/api-go/pkg/fonnte"
 	"github.com/invoicein/api-go/pkg/midtrans"
 	"github.com/invoicein/api-go/pkg/supabase"
 	customvalidator "github.com/invoicein/api-go/pkg/validator"
@@ -72,7 +74,16 @@ func main() {
 	invoiceRepo := repository.NewInvoiceRepository(db)
 	midtransRepo := repository.NewMidtransRepository(db)
 
-	// 7. Wire Midtrans client
+	// 7. Wire Anthropic client
+	anthropicClient := anthropic.NewClient(cfg.AnthropicAPIKey)
+
+	// 7b. Wire Fonnte client (optional — nil if API key not set)
+	var fonnteClient *fonnte.Client
+	if cfg.FonnteAPIKey != "" {
+		fonnteClient = fonnte.NewClient(cfg.FonnteAPIKey)
+	}
+
+	// 7c. Wire Midtrans client
 	midtransClient := midtrans.NewClient(cfg.MidtransServerKey, cfg.MidtransIsProd)
 
 	// 8. Wire services
@@ -85,6 +96,11 @@ func main() {
 	productService := service.NewProductService(productRepo)
 	invoiceService := service.NewInvoiceService(invoiceRepo)
 	invoicePDFService := service.NewInvoicePDFService(invoiceRepo, tenantRepo, storageRepo)
+	aiService := service.NewAIService(anthropicClient, tenantRepo, clientRepo, productRepo)
+	var whatsappService *service.WhatsAppService
+	if fonnteClient != nil {
+		whatsappService = service.NewWhatsAppService(fonnteClient, invoiceRepo, invoicePDFService)
+	}
 	midtransService := service.NewMidtransService(midtransRepo, invoiceRepo, midtransClient)
 
 	// 9. Wire controllers
@@ -96,7 +112,8 @@ func main() {
 	uploadCtrl := controller.NewUploadController(storageService)
 	clientCtrl := controller.NewClientController(clientService)
 	productCtrl := controller.NewProductController(productService)
-	invoiceCtrl := controller.NewInvoiceController(invoiceService, invoicePDFService)
+	invoiceCtrl := controller.NewInvoiceController(invoiceService, invoicePDFService, whatsappService)
+	aiCtrl := controller.NewAIController(aiService)
 	midtransCtrl := controller.NewMidtransController(midtransService)
 
 	// 10. Register custom validators
@@ -114,6 +131,7 @@ func main() {
 		ClientController:         clientCtrl,
 		ProductController:        productCtrl,
 		InvoiceController:        invoiceCtrl,
+		AIController:             aiCtrl,
 		MidtransController:       midtransCtrl,
 		UserRepository:           userRepo,
 	})
