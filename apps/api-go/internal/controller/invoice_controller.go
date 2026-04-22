@@ -239,6 +239,28 @@ func (ic *InvoiceController) CancelInvoice(c *gin.Context) {
 
 // ─── Payments ─────────────────────────────────────────────────────────────────
 
+// GetPayments handles GET /api/v1/invoices/:id/payments.
+func (ic *InvoiceController) GetPayments(c *gin.Context) {
+	tenantID := c.GetString(middleware.CtxTenantID)
+	invoiceID := c.Param("id")
+
+	payments, err := ic.svc.ListPayments(c.Request.Context(), invoiceID, tenantID)
+	if err != nil {
+		switch e := err.(type) {
+		case *service.NotFoundError:
+			response.NotFound(c, e.Resource)
+		default:
+			response.InternalError(c, "Gagal memuat daftar pembayaran")
+		}
+		return
+	}
+
+	response.Success(c, gin.H{
+		"data":  payments,
+		"total": len(payments),
+	})
+}
+
 // CreatePayment handles POST /api/v1/invoices/:id/payments.
 func (ic *InvoiceController) CreatePayment(c *gin.Context) {
 	tenantID := c.GetString(middleware.CtxTenantID)

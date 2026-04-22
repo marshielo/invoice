@@ -424,13 +424,13 @@ func (r *InvoiceRepository) CreatePayment(ctx context.Context, p *model.InvoiceP
 
 	const insertQ = `
 		INSERT INTO invoice_payments (
-			invoice_id, amount, payment_method, payment_date,
-			reference_number, notes
-		) VALUES ($1,$2,$3,$4,$5,$6)
+			invoice_id, tenant_id, amount, payment_method, payment_date,
+			reference_number, notes, recorded_by
+		) VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
 		RETURNING id, created_at`
 	err = tx.QueryRowContext(ctx, insertQ,
-		p.InvoiceID, p.Amount, p.PaymentMethod, p.PaymentDate,
-		p.ReferenceNumber, p.Notes,
+		p.InvoiceID, p.TenantID, p.Amount, p.PaymentMethod, p.PaymentDate,
+		p.ReferenceNumber, p.Notes, p.RecordedBy,
 	).Scan(&p.ID, &p.CreatedAt)
 	if err != nil {
 		return fmt.Errorf("insert payment: %w", err)
@@ -513,6 +513,47 @@ func (r *InvoiceRepository) DeletePayment(ctx context.Context, paymentID, invoic
 	}
 
 	return tx.Commit()
+}
+
+// ListPayments returns all payments for an invoice ordered by date.
+func (r *InvoiceRepository) ListPayments(ctx context.Context, invoiceID, tenantID string) ([]model.InvoicePaymentData, error) {
+	const q = `
+		SELECT id, amount, payment_method, payment_date,
+		       reference_number, proof_url, notes, created_at
+		FROM invoice_payments
+		WHERE invoice_id = $1
+		ORDER BY payment_date, created_at`
+	rows, err := r.db.QueryContext(ctx, q, invoiceID)
+	if err != nil {
+		return nil, fmt.Errorf("list payments: %w", err)
+	}
+	defer rows.Close()
+
+	items := []model.InvoicePaymentData{}
+	for rows.Next() {
+		var p model.InvoicePaymentData
+		var method, ref, proof, notes sql.NullString
+		var payDate, createdAt time.Time
+		if err := rows.Scan(&p.ID, &p.Amount, &method, &payDate, &ref, &proof, &notes, &createdAt); err != nil {
+			return nil, fmt.Errorf("scan payment: %w", err)
+		}
+		if method.Valid {
+			p.PaymentMethod = &method.String
+		}
+		p.PaymentDate = payDate.Format("2006-01-02")
+		if ref.Valid {
+			p.ReferenceNumber = &ref.String
+		}
+		if proof.Valid {
+			p.ProofURL = &proof.String
+		}
+		if notes.Valid {
+			p.Notes = &notes.String
+		}
+		p.CreatedAt = createdAt.Format("2006-01-02T15:04:05Z07:00")
+		items = append(items, p)
+	}
+	return items, rows.Err()
 }
 
 // FindPayment fetches a single payment scoped to an invoice. Returns (nil, nil) if not found.

@@ -16,6 +16,7 @@ import (
 	"github.com/invoicein/api-go/internal/service"
 	"github.com/invoicein/api-go/pkg/anthropic"
 	"github.com/invoicein/api-go/pkg/fonnte"
+	"github.com/invoicein/api-go/pkg/midtrans"
 	"github.com/invoicein/api-go/pkg/supabase"
 	customvalidator "github.com/invoicein/api-go/pkg/validator"
 )
@@ -71,6 +72,7 @@ func main() {
 	clientRepo := repository.NewClientRepository(db)
 	productRepo := repository.NewProductRepository(db)
 	invoiceRepo := repository.NewInvoiceRepository(db)
+	midtransRepo := repository.NewMidtransRepository(db)
 
 	// 7. Wire Anthropic client
 	anthropicClient := anthropic.NewClient(cfg.AnthropicAPIKey)
@@ -80,6 +82,9 @@ func main() {
 	if cfg.FonnteAPIKey != "" {
 		fonnteClient = fonnte.NewClient(cfg.FonnteAPIKey)
 	}
+
+	// 7c. Wire Midtrans client
+	midtransClient := midtrans.NewClient(cfg.MidtransServerKey, cfg.MidtransIsProd)
 
 	// 8. Wire services
 	authService := service.NewAuthService(userRepo)
@@ -96,6 +101,7 @@ func main() {
 	if fonnteClient != nil {
 		whatsappService = service.NewWhatsAppService(fonnteClient, invoiceRepo, invoicePDFService)
 	}
+	midtransService := service.NewMidtransService(midtransRepo, invoiceRepo, midtransClient)
 
 	// 9. Wire controllers
 	healthCtrl := controller.NewHealthController(cfg.Environment)
@@ -108,6 +114,7 @@ func main() {
 	productCtrl := controller.NewProductController(productService)
 	invoiceCtrl := controller.NewInvoiceController(invoiceService, invoicePDFService, whatsappService)
 	aiCtrl := controller.NewAIController(aiService)
+	midtransCtrl := controller.NewMidtransController(midtransService)
 
 	// 10. Register custom validators
 	customvalidator.RegisterCustomValidators()
@@ -125,6 +132,7 @@ func main() {
 		ProductController:        productCtrl,
 		InvoiceController:        invoiceCtrl,
 		AIController:             aiCtrl,
+		MidtransController:       midtransCtrl,
 		UserRepository:           userRepo,
 	})
 

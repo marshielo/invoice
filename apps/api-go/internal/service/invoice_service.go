@@ -366,6 +366,7 @@ func (s *InvoiceService) RecordPayment(
 
 	p := &model.InvoicePayment{
 		InvoiceID:       invoiceID,
+		TenantID:        tenantID,
 		Amount:          fmt.Sprintf("%.2f", req.Amount),
 		PaymentMethod:   req.PaymentMethod,
 		PaymentDate:     payDate,
@@ -377,6 +378,19 @@ func (s *InvoiceService) RecordPayment(
 		return nil, fmt.Errorf("record payment: %w", err)
 	}
 	return s.repo.FindByID(ctx, invoiceID, tenantID)
+}
+
+// ListPayments returns all payments for an invoice scoped to a tenant.
+func (s *InvoiceService) ListPayments(ctx context.Context, invoiceID, tenantID string) ([]model.InvoicePaymentData, error) {
+	// Verify invoice belongs to tenant
+	raw, err := s.repo.FindRawByID(ctx, invoiceID, tenantID)
+	if err != nil {
+		return nil, fmt.Errorf("find invoice: %w", err)
+	}
+	if raw == nil {
+		return nil, &NotFoundError{Resource: "Invoice"}
+	}
+	return s.repo.ListPayments(ctx, invoiceID, tenantID)
 }
 
 // DeletePayment removes a payment from an invoice.
