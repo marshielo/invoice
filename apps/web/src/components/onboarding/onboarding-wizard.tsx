@@ -187,7 +187,7 @@ function StepBusinessInfo({
           slug: data.slug,
           businessType: data.businessType,
           email: data.email,
-          phone: data.phone ?? null,
+          phone: data.phone?.trim() || null,
           fullName: data.name, // placeholder; user sets later in profile settings
         },
         token,
