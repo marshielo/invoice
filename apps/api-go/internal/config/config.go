@@ -54,8 +54,8 @@ func Load() (*Config, error) {
 		R2AccountID:       os.Getenv("R2_ACCOUNT_ID"),
 		R2AccessKeyID:     os.Getenv("R2_ACCESS_KEY_ID"),
 		R2SecretAccessKey: os.Getenv("R2_SECRET_ACCESS_KEY"),
-		R2BucketName:      getEnv("R2_BUCKET_NAME", "invoicein-storage"),
-		R2PublicURL:       getEnv("R2_PUBLIC_URL", "https://storage.invoicein.id"),
+		R2BucketName:      getEnv("R2_BUCKET_NAME", "invoice-storage"),
+		R2PublicURL:       getEnv("R2_PUBLIC_URL", "https://pub-557836111357475c8d796a8bfe7d8cbc.r2.dev"),
 
 		ResendAPIKey:      os.Getenv("RESEND_API_KEY"),
 		FonnteAPIKey:      os.Getenv("FONNTE_API_KEY"),

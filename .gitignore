@@ -55,3 +55,4 @@ drizzle/meta
 .idea
 *.swp
 *.swo
+.gstack/
