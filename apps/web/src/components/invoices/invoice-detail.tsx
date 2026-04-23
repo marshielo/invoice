@@ -165,7 +165,7 @@ export default function InvoiceDetail({ invoiceId }: { invoiceId: string }) {
   // ─── Render helpers ────────────────────────────────────────────────────────
 
   if (isLoading) {
-    return <div className="p-8 text-center text-sm text-gray-500">Memuat...</div>
+    return <div className="p-8 text-center text-sm text-muted-foreground">Memuat...</div>
   }
   if (error || !inv) {
     return <div className="p-8 text-center text-sm text-red-600">Invoice tidak ditemukan.</div>
@@ -180,8 +180,8 @@ export default function InvoiceDetail({ invoiceId }: { invoiceId: string }) {
   const canPay = inv.status === 'sent' || inv.status === 'partial'
   const canWhatsApp = inv.status === 'sent' || inv.status === 'partial'
 
-  const inputCls = 'mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm placeholder:text-gray-400 focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500'
-  const labelCls = 'block text-sm font-medium text-gray-700'
+  const inputCls = 'mt-1 block w-full rounded-lg border border-border px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring'
+  const labelCls = 'block text-sm font-medium text-foreground'
   const errorCls = 'mt-1 text-xs text-red-600'
 
   return (
@@ -189,18 +189,18 @@ export default function InvoiceDetail({ invoiceId }: { invoiceId: string }) {
       {/* Top bar */}
       <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <button onClick={() => router.push('/invoices')} className="text-sm text-gray-500 hover:text-gray-700">
+          <button onClick={() => router.push('/invoices')} className="text-sm text-muted-foreground hover:text-foreground">
             ← Invoice
           </button>
-          <span className="text-gray-300">/</span>
-          <h1 className="text-xl font-bold text-gray-900">{inv.invoiceNumber}</h1>
+          <span className="text-border">/</span>
+          <h1 className="text-xl font-bold font-display text-foreground">{inv.invoiceNumber}</h1>
           <StatusBadge status={inv.status} />
         </div>
         <div className="flex items-center gap-2">
           {canEdit && (
             <Link
               href={`/invoices/${invoiceId}/edit`}
-              className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+              className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground hover:bg-muted"
             >
               Ubah
             </Link>
@@ -209,7 +209,7 @@ export default function InvoiceDetail({ invoiceId }: { invoiceId: string }) {
             <button
               onClick={() => sendMutation.mutate()}
               disabled={sendMutation.isPending}
-              className="rounded-lg bg-sky-600 px-4 py-2 text-sm font-medium text-white hover:bg-sky-700 disabled:opacity-60"
+              className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-accent disabled:opacity-60"
             >
               {sendMutation.isPending ? 'Mengirim...' : 'Kirim'}
             </button>
@@ -237,7 +237,7 @@ export default function InvoiceDetail({ invoiceId }: { invoiceId: string }) {
               href={inv.pdfUrl}
               target="_blank"
               rel="noreferrer"
-              className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+              className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground hover:bg-muted"
             >
               ↓ PDF
             </a>
@@ -259,58 +259,58 @@ export default function InvoiceDetail({ invoiceId }: { invoiceId: string }) {
         <div className="lg:col-span-2 space-y-6">
 
           {/* Header info */}
-          <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+          <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
             <div className="grid grid-cols-2 gap-6">
               <div>
-                <p className="text-xs font-medium uppercase tracking-wider text-gray-500">Pelanggan</p>
-                <p className="mt-1 font-medium text-gray-900">{inv.clientName ?? <span className="italic text-gray-400">Tanpa pelanggan</span>}</p>
+                <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Pelanggan</p>
+                <p className="mt-1 font-medium text-foreground">{inv.clientName ?? <span className="italic text-muted-foreground">Tanpa pelanggan</span>}</p>
               </div>
               <div>
-                <p className="text-xs font-medium uppercase tracking-wider text-gray-500">Nomor Invoice</p>
-                <p className="mt-1 font-medium text-gray-900">{inv.invoiceNumber}</p>
+                <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Nomor Invoice</p>
+                <p className="mt-1 font-medium text-foreground">{inv.invoiceNumber}</p>
               </div>
               <div>
-                <p className="text-xs font-medium uppercase tracking-wider text-gray-500">Tanggal Terbit</p>
-                <p className="mt-1 text-gray-700">{formatDate(inv.issueDate)}</p>
+                <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Tanggal Terbit</p>
+                <p className="mt-1 text-foreground">{formatDate(inv.issueDate)}</p>
               </div>
               <div>
-                <p className="text-xs font-medium uppercase tracking-wider text-gray-500">Jatuh Tempo</p>
-                <p className="mt-1 text-gray-700">{formatDate(inv.dueDate)}</p>
+                <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Jatuh Tempo</p>
+                <p className="mt-1 text-foreground">{formatDate(inv.dueDate)}</p>
               </div>
             </div>
           </div>
 
           {/* Line items */}
-          <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+          <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
+            <table className="min-w-full divide-y divide-border">
+              <thead className="bg-muted">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Deskripsi</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500">Qty</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500">Harga</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500">Pajak</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500">Subtotal</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">Deskripsi</th>
+                  <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-muted-foreground">Qty</th>
+                  <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-muted-foreground">Harga</th>
+                  <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-muted-foreground">Pajak</th>
+                  <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-muted-foreground">Subtotal</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody className="divide-y divide-border">
                 {inv.items.map((item) => {
                   const sub = parseFloat(item.subtotal) + parseFloat(item.taxAmount)
                   return (
                     <tr key={item.id}>
                       <td className="px-6 py-3">
-                        <p className="text-sm font-medium text-gray-900">{item.description}</p>
-                        {item.unit && <p className="text-xs text-gray-500">{item.unit}</p>}
+                        <p className="text-sm font-medium text-foreground">{item.description}</p>
+                        {item.unit && <p className="text-xs text-muted-foreground">{item.unit}</p>}
                       </td>
-                      <td className="whitespace-nowrap px-6 py-3 text-right text-sm text-gray-500">
+                      <td className="whitespace-nowrap px-6 py-3 text-right text-sm text-muted-foreground">
                         {item.quantity}
                       </td>
-                      <td className="whitespace-nowrap px-6 py-3 text-right text-sm text-gray-700">
+                      <td className="whitespace-nowrap px-6 py-3 text-right text-sm text-foreground">
                         {formatRupiah(item.unitPrice)}
                       </td>
-                      <td className="whitespace-nowrap px-6 py-3 text-right text-sm text-gray-500">
+                      <td className="whitespace-nowrap px-6 py-3 text-right text-sm text-muted-foreground">
                         {parseFloat(item.taxRate) > 0 ? `${item.taxRate}%` : '—'}
                       </td>
-                      <td className="whitespace-nowrap px-6 py-3 text-right text-sm font-medium text-gray-900">
+                      <td className="whitespace-nowrap px-6 py-3 text-right text-sm font-medium text-foreground">
                         {formatRupiah(sub)}
                       </td>
                     </tr>
@@ -319,22 +319,22 @@ export default function InvoiceDetail({ invoiceId }: { invoiceId: string }) {
               </tbody>
             </table>
             {/* Totals */}
-            <div className="border-t border-gray-200 px-6 py-4">
+            <div className="border-t border-border px-6 py-4">
               <div className="ml-auto w-64 space-y-1">
-                <div className="flex justify-between text-sm text-gray-600">
+                <div className="flex justify-between text-sm text-muted-foreground">
                   <span>Subtotal</span><span>{formatRupiah(inv.subtotal)}</span>
                 </div>
                 {parseFloat(inv.discountAmount) > 0 && (
-                  <div className="flex justify-between text-sm text-gray-600">
+                  <div className="flex justify-between text-sm text-muted-foreground">
                     <span>Diskon</span><span className="text-red-600">-{formatRupiah(inv.discountAmount)}</span>
                   </div>
                 )}
                 {parseFloat(inv.taxAmount) > 0 && (
-                  <div className="flex justify-between text-sm text-gray-600">
+                  <div className="flex justify-between text-sm text-muted-foreground">
                     <span>Pajak</span><span>{formatRupiah(inv.taxAmount)}</span>
                   </div>
                 )}
-                <div className="flex justify-between border-t border-gray-200 pt-2 text-base font-bold text-gray-900">
+                <div className="flex justify-between border-t border-border pt-2 text-base font-bold text-foreground">
                   <span>Total</span><span>{formatRupiah(inv.total)}</span>
                 </div>
               </div>
@@ -345,15 +345,15 @@ export default function InvoiceDetail({ invoiceId }: { invoiceId: string }) {
           {(inv.notes || inv.terms) && (
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               {inv.notes && (
-                <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-                  <p className="text-xs font-medium uppercase tracking-wider text-gray-500">Catatan</p>
-                  <p className="mt-2 text-sm text-gray-700 whitespace-pre-wrap">{inv.notes}</p>
+                <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
+                  <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Catatan</p>
+                  <p className="mt-2 text-sm text-foreground whitespace-pre-wrap">{inv.notes}</p>
                 </div>
               )}
               {inv.terms && (
-                <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-                  <p className="text-xs font-medium uppercase tracking-wider text-gray-500">Syarat & Ketentuan</p>
-                  <p className="mt-2 text-sm text-gray-700 whitespace-pre-wrap">{inv.terms}</p>
+                <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
+                  <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Syarat & Ketentuan</p>
+                  <p className="mt-2 text-sm text-foreground whitespace-pre-wrap">{inv.terms}</p>
                 </div>
               )}
             </div>
@@ -364,20 +364,20 @@ export default function InvoiceDetail({ invoiceId }: { invoiceId: string }) {
         <div className="space-y-6">
 
           {/* Payment progress */}
-          <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-            <p className="text-xs font-medium uppercase tracking-wider text-gray-500">Pembayaran</p>
+          <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
+            <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Pembayaran</p>
             <div className="mt-3">
-              <div className="flex justify-between text-sm text-gray-600 mb-1">
+              <div className="flex justify-between text-sm text-muted-foreground mb-1">
                 <span>Terbayar</span>
-                <span className="font-medium text-gray-900">{formatRupiah(inv.amountPaid)}</span>
+                <span className="font-medium text-foreground">{formatRupiah(inv.amountPaid)}</span>
               </div>
-              <div className="h-2 w-full rounded-full bg-gray-100">
+              <div className="h-2 w-full rounded-full bg-muted">
                 <div
-                  className="h-2 rounded-full bg-sky-500 transition-all"
+                  className="h-2 rounded-full bg-primary transition-all"
                   style={{ width: `${paidPercent}%` }}
                 />
               </div>
-              <div className="mt-1 flex justify-between text-xs text-gray-400">
+              <div className="mt-1 flex justify-between text-xs text-muted-foreground">
                 <span>{paidPercent.toFixed(0)}%</span>
                 <span>{formatRupiah(inv.total)}</span>
               </div>
@@ -390,7 +390,7 @@ export default function InvoiceDetail({ invoiceId }: { invoiceId: string }) {
             {canPay && (
               <button
                 onClick={() => setShowPaymentForm(true)}
-                className="mt-4 w-full rounded-lg bg-sky-600 py-2 text-sm font-medium text-white hover:bg-sky-700"
+                className="mt-4 w-full rounded-lg bg-primary py-2 text-sm font-medium text-primary-foreground hover:bg-accent"
               >
                 + Catat Pembayaran
               </button>
@@ -399,8 +399,8 @@ export default function InvoiceDetail({ invoiceId }: { invoiceId: string }) {
 
           {/* Midtrans payment link */}
           {canPay && (
-            <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-              <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">Link Pembayaran Midtrans</p>
+            <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Link Pembayaran Midtrans</p>
 
               {paymentLink ? (
                 <div className="mt-3 space-y-3">
@@ -410,19 +410,19 @@ export default function InvoiceDetail({ invoiceId }: { invoiceId: string }) {
                     <img
                       src={`https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(paymentLink.redirectUrl)}`}
                       alt="QR Code Pembayaran"
-                      className="rounded-lg border border-gray-200"
+                      className="rounded-lg border border-border"
                       width={160}
                       height={160}
                     />
                   </div>
                   {/* URL */}
-                  <div className="rounded-lg bg-gray-50 px-3 py-2 text-xs text-gray-600 break-all">
+                  <div className="rounded-lg bg-muted px-3 py-2 text-xs text-muted-foreground break-all">
                     {paymentLink.redirectUrl}
                   </div>
                   <div className="flex gap-2">
                     <button
                       onClick={handleCopyLink}
-                      className="flex-1 rounded-lg border border-gray-300 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50"
+                      className="flex-1 rounded-lg border border-border py-1.5 text-xs font-medium text-foreground hover:bg-muted"
                     >
                       {linkCopied ? '✓ Tersalin' : 'Salin Link'}
                     </button>
@@ -438,7 +438,7 @@ export default function InvoiceDetail({ invoiceId }: { invoiceId: string }) {
                   <button
                     onClick={() => paymentLinkMutation.mutate()}
                     disabled={paymentLinkMutation.isPending}
-                    className="w-full text-xs text-gray-400 hover:text-gray-600 disabled:opacity-60"
+                    className="w-full text-xs text-muted-foreground hover:text-foreground disabled:opacity-60"
                   >
                     Buat link baru
                   </button>
@@ -447,7 +447,7 @@ export default function InvoiceDetail({ invoiceId }: { invoiceId: string }) {
                 <button
                   onClick={() => paymentLinkMutation.mutate()}
                   disabled={paymentLinkMutation.isPending}
-                  className="mt-3 w-full rounded-lg border border-sky-300 bg-sky-50 py-2 text-sm font-medium text-sky-700 hover:bg-sky-100 disabled:opacity-60"
+                  className="mt-3 w-full rounded-lg border border-border bg-secondary py-2 text-sm font-medium text-foreground hover:bg-muted disabled:opacity-60"
                 >
                   {paymentLinkMutation.isPending ? 'Membuat...' : '🔗 Buat Link Midtrans'}
                 </button>
@@ -457,21 +457,21 @@ export default function InvoiceDetail({ invoiceId }: { invoiceId: string }) {
 
           {/* Payment history */}
           {inv.payments.length > 0 && (
-            <div className="rounded-xl border border-gray-200 bg-white shadow-sm">
-              <div className="border-b border-gray-200 px-4 py-3">
-                <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">Riwayat Pembayaran</p>
+            <div className="rounded-xl border border-border bg-card shadow-sm">
+              <div className="border-b border-border px-4 py-3">
+                <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Riwayat Pembayaran</p>
               </div>
-              <div className="divide-y divide-gray-100">
+              <div className="divide-y divide-border">
                 {inv.payments.map((p) => (
                   <div key={p.id} className="flex items-start justify-between px-4 py-3">
                     <div>
-                      <p className="text-sm font-medium text-gray-900">{formatRupiah(p.amount)}</p>
-                      <p className="text-xs text-gray-500">{formatDate(p.paymentDate)}</p>
+                      <p className="text-sm font-medium text-foreground">{formatRupiah(p.amount)}</p>
+                      <p className="text-xs text-muted-foreground">{formatDate(p.paymentDate)}</p>
                       {p.paymentMethod && (
-                        <p className="text-xs text-gray-400 capitalize">{p.paymentMethod.replace('_', ' ')}</p>
+                        <p className="text-xs text-muted-foreground capitalize">{p.paymentMethod.replace('_', ' ')}</p>
                       )}
                       {p.referenceNumber && (
-                        <p className="text-xs text-gray-400">Ref: {p.referenceNumber}</p>
+                        <p className="text-xs text-muted-foreground">Ref: {p.referenceNumber}</p>
                       )}
                     </div>
                     <button
@@ -491,8 +491,8 @@ export default function InvoiceDetail({ invoiceId }: { invoiceId: string }) {
       {/* Record payment modal */}
       {showPaymentForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-          <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
-            <h2 className="text-lg font-semibold text-gray-900">Catat Pembayaran</h2>
+          <div className="w-full max-w-md rounded-xl bg-card p-6 shadow-xl">
+            <h2 className="text-lg font-semibold text-foreground">Catat Pembayaran</h2>
             <form onSubmit={onPaymentSubmit} className="mt-4 space-y-4">
               <div>
                 <label className={labelCls}>Jumlah (Rp) <span className="text-red-500">*</span></label>
@@ -529,14 +529,14 @@ export default function InvoiceDetail({ invoiceId }: { invoiceId: string }) {
                 <button
                   type="button"
                   onClick={() => { setShowPaymentForm(false); resetPayment() }}
-                  className="flex-1 rounded-lg border border-gray-300 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                  className="flex-1 rounded-lg border border-border py-2 text-sm font-medium text-foreground hover:bg-muted"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
                   disabled={createPaymentMutation.isPending}
-                  className="flex-1 rounded-lg bg-sky-600 py-2 text-sm font-medium text-white hover:bg-sky-700 disabled:opacity-60"
+                  className="flex-1 rounded-lg bg-primary py-2 text-sm font-medium text-primary-foreground hover:bg-accent disabled:opacity-60"
                 >
                   {createPaymentMutation.isPending ? 'Menyimpan...' : 'Simpan'}
                 </button>
@@ -549,13 +549,13 @@ export default function InvoiceDetail({ invoiceId }: { invoiceId: string }) {
       {/* Delete payment confirm */}
       {deletePaymentId && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-          <div className="w-full max-w-sm rounded-xl bg-white p-6 shadow-xl">
-            <h2 className="text-lg font-semibold text-gray-900">Hapus Pembayaran</h2>
-            <p className="mt-2 text-sm text-gray-600">Yakin ingin menghapus catatan pembayaran ini?</p>
+          <div className="w-full max-w-sm rounded-xl bg-card p-6 shadow-xl">
+            <h2 className="text-lg font-semibold text-foreground">Hapus Pembayaran</h2>
+            <p className="mt-2 text-sm text-muted-foreground">Yakin ingin menghapus catatan pembayaran ini?</p>
             <div className="mt-4 flex justify-end gap-3">
               <button
                 onClick={() => setDeletePaymentId(null)}
-                className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground hover:bg-muted"
               >
                 Batal
               </button>
@@ -576,7 +576,7 @@ export default function InvoiceDetail({ invoiceId }: { invoiceId: string }) {
 
 function StatusBadge({ status }: { status: InvoiceStatus }) {
   return (
-    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${STATUS_COLORS[status] ?? 'bg-gray-100 text-gray-700'}`}>
+    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${STATUS_COLORS[status] ?? 'bg-muted text-foreground'}`}>
       {STATUS_LABELS[status] ?? status}
     </span>
   )
