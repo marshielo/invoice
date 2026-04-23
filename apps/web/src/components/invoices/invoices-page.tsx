@@ -91,26 +91,26 @@ export default function InvoicesPage() {
   const totalPages = Math.ceil(total / LIMIT)
 
   const inputCls =
-    'block rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm placeholder:text-gray-400 focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500'
+    'block rounded-lg border border-border px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring'
 
   return (
     <div>
       {/* Header */}
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Invoice</h1>
-          <p className="mt-1 text-sm text-gray-500">Kelola tagihan dan pembayaran bisnis Anda</p>
+          <h1 className="text-2xl font-bold font-display text-foreground">Invoice</h1>
+          <p className="mt-1 text-sm text-muted-foreground">Kelola tagihan dan pembayaran bisnis Anda</p>
         </div>
         <div className="flex items-center gap-2">
           <button
             onClick={() => setShowAIDialog(true)}
-            className="rounded-lg border border-sky-300 bg-sky-50 px-4 py-2 text-sm font-medium text-sky-700 hover:bg-sky-100 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
+            className="rounded-lg border border-border bg-secondary px-4 py-2 text-sm font-medium text-foreground hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
           >
             ✨ Buat dengan AI
           </button>
           <Link
             href="/invoices/new"
-            className="rounded-lg bg-sky-600 px-4 py-2 text-sm font-medium text-white hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
+            className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-accent focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
           >
             + Buat Invoice
           </Link>
@@ -118,13 +118,13 @@ export default function InvoicesPage() {
       </div>
 
       {/* Status tabs */}
-      <div className="mb-4 flex flex-wrap gap-1 rounded-lg border border-gray-200 bg-gray-100 p-1 w-fit">
+      <div className="mb-4 flex flex-wrap gap-1 rounded-lg border border-border bg-muted p-1 w-fit">
         {TABS.map((t) => (
           <button
             key={t.key}
             onClick={() => { setTab(t.key); setPage(1) }}
             className={`rounded-md px-3 py-1.5 text-xs font-medium transition ${
-              tab === t.key ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-600 hover:text-gray-900'
+              tab === t.key ? 'bg-card text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'
             }`}
           >
             {t.label}
@@ -158,7 +158,7 @@ export default function InvoicesPage() {
         {(search || fromDate || toDate) && (
           <button
             onClick={() => { setSearch(''); setFromDate(''); setToDate(''); setPage(1) }}
-            className="text-sm text-gray-500 hover:text-gray-700 underline"
+            className="text-sm text-muted-foreground hover:text-foreground underline"
           >
             Reset filter
           </button>
@@ -166,53 +166,53 @@ export default function InvoicesPage() {
       </div>
 
       {/* Table */}
-      <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+      <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
         {isLoading ? (
-          <div className="p-8 text-center text-sm text-gray-500">Memuat...</div>
+          <div className="p-8 text-center text-sm text-muted-foreground">Memuat...</div>
         ) : error ? (
           <div className="p-8 text-center text-sm text-red-600">Gagal memuat data invoice.</div>
         ) : invoices.length === 0 ? (
-          <div className="p-8 text-center text-sm text-gray-500">
+          <div className="p-8 text-center text-sm text-muted-foreground">
             {search || tab !== 'all' ? 'Tidak ada invoice yang cocok.' : 'Belum ada invoice. Buat invoice pertama Anda.'}
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+            <table className="min-w-full divide-y divide-border">
+              <thead className="bg-muted">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Nomor</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Pelanggan</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Tgl. Dibuat</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Jatuh Tempo</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500">Total</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500">Terbayar</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Status</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">Nomor</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">Pelanggan</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">Tgl. Dibuat</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">Jatuh Tempo</th>
+                  <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-muted-foreground">Total</th>
+                  <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-muted-foreground">Terbayar</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">Status</th>
                   <th className="relative px-6 py-3"><span className="sr-only">Aksi</span></th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200 bg-white">
+              <tbody className="divide-y divide-border bg-card">
                 {invoices.map((inv) => (
                   <tr
                     key={inv.id}
-                    className="cursor-pointer hover:bg-gray-50"
+                    className="cursor-pointer hover:bg-muted"
                     onClick={() => router.push(`/invoices/${inv.id}`)}
                   >
-                    <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-sky-600">
+                    <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-primary">
                       {inv.invoiceNumber}
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-700">
-                      {inv.clientName ?? <span className="text-gray-400 italic">Tanpa pelanggan</span>}
+                    <td className="whitespace-nowrap px-6 py-4 text-sm text-foreground">
+                      {inv.clientName ?? <span className="text-muted-foreground italic">Tanpa pelanggan</span>}
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
+                    <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground">
                       {formatDate(inv.issueDate)}
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
+                    <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground">
                       {formatDate(inv.dueDate)}
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium text-gray-900">
+                    <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium text-foreground">
                       {formatRupiah(inv.total)}
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-right text-sm text-gray-500">
+                    <td className="whitespace-nowrap px-6 py-4 text-right text-sm text-muted-foreground">
                       {formatRupiah(inv.amountPaid)}
                     </td>
                     <td className="whitespace-nowrap px-6 py-4">
@@ -221,7 +221,7 @@ export default function InvoicesPage() {
                     <td className="whitespace-nowrap px-6 py-4 text-right text-sm" onClick={(e) => e.stopPropagation()}>
                       <Link
                         href={`/invoices/${inv.id}/edit`}
-                        className="mr-3 text-sky-600 hover:text-sky-800"
+                        className="mr-3 text-primary hover:text-accent"
                       >
                         Ubah
                       </Link>
@@ -244,20 +244,20 @@ export default function InvoicesPage() {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="mt-4 flex items-center justify-between text-sm text-gray-600">
+        <div className="mt-4 flex items-center justify-between text-sm text-muted-foreground">
           <span>{total} invoice · Halaman {page} dari {totalPages}</span>
           <div className="flex gap-2">
             <button
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page === 1}
-              className="rounded-lg border border-gray-300 px-3 py-1 hover:bg-gray-50 disabled:opacity-40"
+              className="rounded-lg border border-border px-3 py-1 hover:bg-muted disabled:opacity-40"
             >
               ← Sebelumnya
             </button>
             <button
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={page === totalPages}
-              className="rounded-lg border border-gray-300 px-3 py-1 hover:bg-gray-50 disabled:opacity-40"
+              className="rounded-lg border border-border px-3 py-1 hover:bg-muted disabled:opacity-40"
             >
               Selanjutnya →
             </button>
@@ -271,9 +271,9 @@ export default function InvoicesPage() {
       {/* Delete confirm */}
       {deleting && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-          <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
-            <h2 className="text-lg font-semibold text-gray-900">Hapus Invoice</h2>
-            <p className="mt-2 text-sm text-gray-600">
+          <div className="w-full max-w-md rounded-xl bg-card p-6 shadow-xl">
+            <h2 className="text-lg font-semibold text-foreground">Hapus Invoice</h2>
+            <p className="mt-2 text-sm text-muted-foreground">
               Yakin ingin menghapus invoice <strong>{deleting.invoiceNumber}</strong>? Tindakan ini tidak dapat dibatalkan.
             </p>
             {deleteError && (
@@ -282,7 +282,7 @@ export default function InvoicesPage() {
             <div className="mt-4 flex justify-end gap-3">
               <button
                 onClick={() => { setDeleting(null); setDeleteError(null) }}
-                className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground hover:bg-muted"
               >
                 Batal
               </button>
@@ -303,7 +303,7 @@ export default function InvoicesPage() {
 
 function StatusBadge({ status }: { status: InvoiceStatus }) {
   return (
-    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${STATUS_COLORS[status] ?? 'bg-gray-100 text-gray-700'}`}>
+    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${STATUS_COLORS[status] ?? 'bg-muted text-foreground'}`}>
       {STATUS_LABELS[status] ?? status}
     </span>
   )
