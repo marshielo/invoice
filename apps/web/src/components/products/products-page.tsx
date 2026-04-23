@@ -119,7 +119,7 @@ export default function ProductsPage() {
   const totalPages = Math.ceil(total / LIMIT)
 
   const inputCls =
-    'block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm placeholder:text-gray-400 focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500'
+    'block w-full rounded-lg border border-border px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring'
 
   const tabs: { key: TabFilter; label: string }[] = [
     { key: 'all', label: 'Semua' },
@@ -132,12 +132,12 @@ export default function ProductsPage() {
       {/* Header */}
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Produk & Layanan</h1>
-          <p className="mt-1 text-sm text-gray-500">Kelola katalog produk dan layanan Anda</p>
+          <h1 className="font-display text-2xl font-bold text-foreground">Produk & Layanan</h1>
+          <p className="mt-1 text-sm text-muted-foreground">Kelola katalog produk dan layanan Anda</p>
         </div>
         <button
           onClick={() => { setEditing(null); setFormOpen(true) }}
-          className="rounded-lg bg-sky-600 px-4 py-2 text-sm font-medium text-white hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
+          className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-accent focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
         >
           + Tambah Produk
         </button>
@@ -145,15 +145,15 @@ export default function ProductsPage() {
 
       {/* Tabs + Search */}
       <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex gap-1 rounded-lg border border-gray-200 bg-gray-100 p-1 w-fit">
+        <div className="flex gap-1 rounded-lg border border-border bg-muted p-1 w-fit">
           {tabs.map((t) => (
             <button
               key={t.key}
               onClick={() => { setTab(t.key); setPage(1) }}
               className={`rounded-md px-4 py-1.5 text-sm font-medium transition ${
                 tab === t.key
-                  ? 'bg-white text-gray-900 shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900'
+                  ? 'bg-card text-foreground shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground'
               }`}
             >
               {t.label}
@@ -172,34 +172,34 @@ export default function ProductsPage() {
       </div>
 
       {/* Table */}
-      <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+      <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
         {isLoading ? (
-          <div className="p-8 text-center text-sm text-gray-500">Memuat...</div>
+          <div className="p-8 text-center text-sm text-muted-foreground">Memuat...</div>
         ) : error ? (
           <div className="p-8 text-center text-sm text-red-600">Gagal memuat data produk.</div>
         ) : products.length === 0 ? (
-          <div className="p-8 text-center text-sm text-gray-500">
+          <div className="p-8 text-center text-sm text-muted-foreground">
             {search ? 'Tidak ada produk yang cocok.' : 'Belum ada produk. Tambahkan produk pertama Anda.'}
           </div>
         ) : (
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+          <table className="min-w-full divide-y divide-border">
+            <thead className="bg-muted">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Nama</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Tipe</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Satuan</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Harga</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Aktif</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">Nama</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">Tipe</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">Satuan</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">Harga</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">Aktif</th>
                 <th className="relative px-6 py-3"><span className="sr-only">Aksi</span></th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200 bg-white">
+            <tbody className="divide-y divide-border bg-card">
               {products.map((product) => (
-                <tr key={product.id} className="hover:bg-gray-50">
+                <tr key={product.id} className="hover:bg-muted">
                   <td className="px-6 py-4">
-                    <div className="text-sm font-medium text-gray-900">{product.name}</div>
+                    <div className="text-sm font-medium text-foreground">{product.name}</div>
                     {product.description && (
-                      <div className="text-xs text-gray-500 truncate max-w-xs">{product.description}</div>
+                      <div className="text-xs text-muted-foreground truncate max-w-xs">{product.description}</div>
                     )}
                   </td>
                   <td className="whitespace-nowrap px-6 py-4">
@@ -211,17 +211,17 @@ export default function ProductsPage() {
                       {product.productType === 'service' ? 'Layanan' : 'Produk'}
                     </span>
                   </td>
-                  <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
+                  <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground">
                     {product.unit ?? '—'}
                   </td>
-                  <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900">
+                  <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-foreground">
                     {formatRupiah(product.price)}
                   </td>
                   <td className="whitespace-nowrap px-6 py-4">
                     <button
                       onClick={() => toggleActiveMutation.mutate({ id: product.id, isActive: !product.isActive })}
-                      className={`relative inline-flex h-5 w-9 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 ${
-                        product.isActive ? 'bg-sky-600' : 'bg-gray-200'
+                      className={`relative inline-flex h-5 w-9 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ${
+                        product.isActive ? 'bg-primary' : 'bg-muted-foreground/30'
                       }`}
                       aria-label="Toggle aktif"
                     >
@@ -235,7 +235,7 @@ export default function ProductsPage() {
                   <td className="whitespace-nowrap px-6 py-4 text-right text-sm">
                     <button
                       onClick={() => handleEdit(product)}
-                      className="mr-3 text-sky-600 hover:text-sky-800"
+                      className="mr-3 text-primary hover:text-accent"
                     >
                       Ubah
                     </button>
@@ -255,20 +255,20 @@ export default function ProductsPage() {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="mt-4 flex items-center justify-between text-sm text-gray-600">
+        <div className="mt-4 flex items-center justify-between text-sm text-muted-foreground">
           <span>{total} produk · Halaman {page} dari {totalPages}</span>
           <div className="flex gap-2">
             <button
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page === 1}
-              className="rounded-lg border border-gray-300 px-3 py-1 hover:bg-gray-50 disabled:opacity-40"
+              className="rounded-lg border border-border px-3 py-1 hover:bg-muted disabled:opacity-40"
             >
               ← Sebelumnya
             </button>
             <button
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={page === totalPages}
-              className="rounded-lg border border-gray-300 px-3 py-1 hover:bg-gray-50 disabled:opacity-40"
+              className="rounded-lg border border-border px-3 py-1 hover:bg-muted disabled:opacity-40"
             >
               Selanjutnya →
             </button>
@@ -292,9 +292,9 @@ export default function ProductsPage() {
       {/* Delete confirmation */}
       {deleting && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-          <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
-            <h2 className="text-lg font-semibold text-gray-900">Hapus Produk</h2>
-            <p className="mt-2 text-sm text-gray-600">
+          <div className="w-full max-w-md rounded-xl bg-card p-6 shadow-xl">
+            <h2 className="text-lg font-semibold text-foreground">Hapus Produk</h2>
+            <p className="mt-2 text-sm text-muted-foreground">
               Yakin ingin menghapus <strong>{deleting.name}</strong>? Tindakan ini tidak dapat dibatalkan.
             </p>
             {deleteError && (
@@ -303,7 +303,7 @@ export default function ProductsPage() {
             <div className="mt-4 flex justify-end gap-3">
               <button
                 onClick={() => { setDeleting(null); setDeleteError(null) }}
-                className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground hover:bg-muted"
               >
                 Batal
               </button>

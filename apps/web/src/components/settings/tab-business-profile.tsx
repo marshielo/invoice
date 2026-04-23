@@ -11,8 +11,8 @@ import { INDONESIAN_PROVINCES } from '@invoicein/shared/constants'
 import type { SettingsData } from '@/lib/types'
 
 const inputCls =
-  'mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm placeholder:text-gray-400 focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 disabled:bg-gray-50'
-const labelCls = 'block text-sm font-medium text-gray-700'
+  'mt-1 block w-full rounded-lg border border-border px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring disabled:bg-muted'
+const labelCls = 'block text-sm font-medium text-foreground'
 const errorCls = 'mt-1 text-xs text-red-600'
 
 const schema = z.object({
@@ -93,8 +93,8 @@ export function TabBusinessProfile({ settings, token, onSaved }: Props) {
   return (
     <div className="max-w-2xl">
       <div className="mb-6">
-        <h2 className="text-lg font-semibold text-gray-900">{t('businessProfile.title')}</h2>
-        <p className="mt-1 text-sm text-gray-500">{t('businessProfile.subtitle')}</p>
+        <h2 className="text-lg font-semibold text-foreground">{t('businessProfile.title')}</h2>
+        <p className="mt-1 text-sm text-muted-foreground">{t('businessProfile.subtitle')}</p>
       </div>
 
       {banner === 'saved' && (
@@ -108,23 +108,23 @@ export function TabBusinessProfile({ settings, token, onSaved }: Props) {
 
       {/* Logo section */}
       <div className="mb-6 flex items-center gap-4">
-        <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-xl border border-gray-200 bg-gray-50">
+        <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-xl border border-border bg-muted">
           {logoPreview ? (
             <img src={logoPreview} alt="Logo" className="h-full w-full object-contain" />
           ) : (
-            <svg className="h-8 w-8 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="h-8 w-8 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
           )}
         </div>
         <div>
-          <p className="text-sm font-medium text-gray-700">{t('businessProfile.logo')}</p>
-          <p className="mt-0.5 text-xs text-gray-400">{t('businessProfile.logoHint')}</p>
+          <p className="text-sm font-medium text-foreground">{t('businessProfile.logo')}</p>
+          <p className="mt-0.5 text-xs text-muted-foreground">{t('businessProfile.logoHint')}</p>
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
             disabled={logoMutation.isPending}
-            className="mt-2 rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 shadow-sm transition-colors hover:bg-gray-50 disabled:opacity-60"
+            className="mt-2 rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground shadow-sm transition-colors hover:bg-muted disabled:opacity-60"
           >
             {logoMutation.isPending
               ? t('businessProfile.uploading')
@@ -233,7 +233,7 @@ export function TabBusinessProfile({ settings, token, onSaved }: Props) {
           <button
             type="submit"
             disabled={saveMutation.isPending || !isDirty}
-            className="rounded-lg bg-sky-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-sky-700 disabled:cursor-not-allowed disabled:opacity-60"
+            className="rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-accent disabled:cursor-not-allowed disabled:opacity-60"
           >
             {saveMutation.isPending ? t('businessProfile.saving') : t('businessProfile.save')}
           </button>

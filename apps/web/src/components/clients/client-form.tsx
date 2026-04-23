@@ -106,19 +106,19 @@ export default function ClientForm({ token, client, onClose, onSaved }: Props) {
   const onSubmit = handleSubmit((values) => mutation.mutate(values))
 
   const inputCls =
-    'mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm placeholder:text-gray-400 focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500'
-  const labelCls = 'block text-sm font-medium text-gray-700'
+    'mt-1 block w-full rounded-lg border border-border px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring'
+  const labelCls = 'block text-sm font-medium text-foreground'
   const errorCls = 'mt-1 text-xs text-red-600'
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end bg-black/40">
-      <div className="flex h-full w-full max-w-md flex-col bg-white shadow-xl">
+      <div className="flex h-full w-full max-w-md flex-col bg-card shadow-xl">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
-          <h2 className="text-lg font-semibold text-gray-900">
+        <div className="flex items-center justify-between border-b border-border px-6 py-4">
+          <h2 className="text-lg font-semibold text-foreground">
             {isEdit ? 'Ubah Pelanggan' : 'Tambah Pelanggan'}
           </h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-xl leading-none">✕</button>
+          <button onClick={onClose} className="text-muted-foreground hover:text-foreground text-xl leading-none">✕</button>
         </div>
 
         {/* Body */}
@@ -187,11 +187,11 @@ export default function ClientForm({ token, client, onClose, onSaved }: Props) {
         </form>
 
         {/* Footer */}
-        <div className="flex gap-3 border-t border-gray-200 px-6 py-4">
+        <div className="flex gap-3 border-t border-border px-6 py-4">
           <button
             type="button"
             onClick={onClose}
-            className="flex-1 rounded-lg border border-gray-300 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+            className="flex-1 rounded-lg border border-border py-2 text-sm font-medium text-foreground hover:bg-muted"
           >
             Batal
           </button>
@@ -200,7 +200,7 @@ export default function ClientForm({ token, client, onClose, onSaved }: Props) {
             form=""
             onClick={onSubmit}
             disabled={isSubmitting || mutation.isPending}
-            className="flex-1 rounded-lg bg-sky-600 py-2 text-sm font-medium text-white hover:bg-sky-700 disabled:opacity-60"
+            className="flex-1 rounded-lg bg-primary py-2 text-sm font-medium text-white hover:bg-accent disabled:opacity-60"
           >
             {mutation.isPending ? 'Menyimpan...' : isEdit ? 'Simpan Perubahan' : 'Tambah Pelanggan'}
           </button>

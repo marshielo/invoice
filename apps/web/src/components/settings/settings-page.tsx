@@ -37,10 +37,10 @@ export function SettingsPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-900">{t('title')}</h1>
+      <h1 className="font-display text-2xl font-bold text-foreground">{t('title')}</h1>
 
       {/* Tab nav */}
-      <div className="mt-6 border-b border-gray-200">
+      <div className="mt-6 border-b border-border">
         <nav className="-mb-px flex gap-0 overflow-x-auto">
           {TABS.map((tab) => (
             <button
@@ -48,8 +48,8 @@ export function SettingsPage() {
               onClick={() => setActiveTab(tab)}
               className={`whitespace-nowrap border-b-2 px-4 py-3 text-sm font-medium transition-colors ${
                 activeTab === tab
-                  ? 'border-sky-600 text-sky-600'
-                  : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                  ? 'border-primary text-primary'
+                  : 'border-transparent text-muted-foreground hover:border-border hover:text-foreground'
               }`}
             >
               {t(`tabs.${tab}`)}
@@ -61,7 +61,7 @@ export function SettingsPage() {
       {/* Tab content */}
       <div className="mt-6">
         {isLoading || !token ? (
-          <div className="flex h-48 items-center justify-center text-sm text-gray-400">
+          <div className="flex h-48 items-center justify-center text-sm text-muted-foreground">
             Loading...
           </div>
         ) : isError ? (

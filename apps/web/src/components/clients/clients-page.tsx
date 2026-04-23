@@ -110,19 +110,19 @@ export default function ClientsPage() {
   const totalPages = Math.ceil(total / LIMIT)
 
   const inputCls =
-    'block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm placeholder:text-gray-400 focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500'
+    'block w-full rounded-lg border border-border px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring'
 
   return (
     <div>
       {/* Header */}
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Pelanggan</h1>
-          <p className="mt-1 text-sm text-gray-500">Kelola data pelanggan bisnis Anda</p>
+          <h1 className="font-display text-2xl font-bold text-foreground">Pelanggan</h1>
+          <p className="mt-1 text-sm text-muted-foreground">Kelola data pelanggan bisnis Anda</p>
         </div>
         <button
           onClick={() => { setEditing(null); setFormOpen(true) }}
-          className="rounded-lg bg-sky-600 px-4 py-2 text-sm font-medium text-white hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
+          className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-accent focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
         >
           + Tambah Pelanggan
         </button>
@@ -140,45 +140,45 @@ export default function ClientsPage() {
       </div>
 
       {/* Table */}
-      <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+      <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
         {isLoading ? (
-          <div className="p-8 text-center text-sm text-gray-500">Memuat...</div>
+          <div className="p-8 text-center text-sm text-muted-foreground">Memuat...</div>
         ) : error ? (
           <div className="p-8 text-center text-sm text-red-600">Gagal memuat data pelanggan.</div>
         ) : clients.length === 0 ? (
-          <div className="p-8 text-center text-sm text-gray-500">
+          <div className="p-8 text-center text-sm text-muted-foreground">
             {search ? 'Tidak ada pelanggan yang cocok.' : 'Belum ada pelanggan. Tambahkan pelanggan pertama Anda.'}
           </div>
         ) : (
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+          <table className="min-w-full divide-y divide-border">
+            <thead className="bg-muted">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Nama</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Email</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Telepon</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Kota</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">Nama</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">Email</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">Telepon</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">Kota</th>
                 <th className="relative px-6 py-3"><span className="sr-only">Aksi</span></th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200 bg-white">
+            <tbody className="divide-y divide-border bg-card">
               {clients.map((client) => (
-                <tr key={client.id} className="hover:bg-gray-50">
+                <tr key={client.id} className="hover:bg-muted">
                   <td className="whitespace-nowrap px-6 py-4">
-                    <span className="text-sm font-medium text-gray-900">{client.name}</span>
+                    <span className="text-sm font-medium text-foreground">{client.name}</span>
                   </td>
-                  <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
+                  <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground">
                     {client.email ?? '—'}
                   </td>
-                  <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
+                  <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground">
                     {client.phone ?? '—'}
                   </td>
-                  <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
+                  <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground">
                     {client.city ?? '—'}
                   </td>
                   <td className="whitespace-nowrap px-6 py-4 text-right text-sm">
                     <button
                       onClick={() => handleEdit(client)}
-                      className="mr-3 text-sky-600 hover:text-sky-800"
+                      className="mr-3 text-primary hover:text-accent"
                     >
                       Ubah
                     </button>
@@ -198,7 +198,7 @@ export default function ClientsPage() {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="mt-4 flex items-center justify-between text-sm text-gray-600">
+        <div className="mt-4 flex items-center justify-between text-sm text-muted-foreground">
           <span>
             {total} pelanggan · Halaman {page} dari {totalPages}
           </span>
@@ -206,14 +206,14 @@ export default function ClientsPage() {
             <button
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page === 1}
-              className="rounded-lg border border-gray-300 px-3 py-1 hover:bg-gray-50 disabled:opacity-40"
+              className="rounded-lg border border-border px-3 py-1 hover:bg-muted disabled:opacity-40"
             >
               ← Sebelumnya
             </button>
             <button
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={page === totalPages}
-              className="rounded-lg border border-gray-300 px-3 py-1 hover:bg-gray-50 disabled:opacity-40"
+              className="rounded-lg border border-border px-3 py-1 hover:bg-muted disabled:opacity-40"
             >
               Selanjutnya →
             </button>
@@ -237,9 +237,9 @@ export default function ClientsPage() {
       {/* Delete confirmation */}
       {deleting && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-          <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
-            <h2 className="text-lg font-semibold text-gray-900">Hapus Pelanggan</h2>
-            <p className="mt-2 text-sm text-gray-600">
+          <div className="w-full max-w-md rounded-xl bg-card p-6 shadow-xl">
+            <h2 className="text-lg font-semibold text-foreground">Hapus Pelanggan</h2>
+            <p className="mt-2 text-sm text-muted-foreground">
               Yakin ingin menghapus <strong>{deleting.name}</strong>? Tindakan ini tidak dapat dibatalkan.
             </p>
             {deleteError && (
@@ -248,7 +248,7 @@ export default function ClientsPage() {
             <div className="mt-4 flex justify-end gap-3">
               <button
                 onClick={() => { setDeleting(null); setDeleteError(null) }}
-                className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground hover:bg-muted"
               >
                 Batal
               </button>

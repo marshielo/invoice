@@ -11,8 +11,8 @@ import { INDONESIAN_BANKS } from '@invoicein/shared/constants'
 import type { BankAccount } from '@/lib/types'
 
 const inputCls =
-  'mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm placeholder:text-gray-400 focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 disabled:bg-gray-50'
-const labelCls = 'block text-sm font-medium text-gray-700'
+  'mt-1 block w-full rounded-lg border border-border px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring disabled:bg-muted'
+const labelCls = 'block text-sm font-medium text-foreground'
 const errorCls = 'mt-1 text-xs text-red-600'
 
 const addSchema = z.object({
@@ -77,13 +77,13 @@ export function TabBankAccounts({ bankAccounts, token, onChanged }: Props) {
     <div className="max-w-2xl">
       <div className="mb-6 flex items-start justify-between">
         <div>
-          <h2 className="text-lg font-semibold text-gray-900">{t('bankAccounts.title')}</h2>
-          <p className="mt-1 text-sm text-gray-500">{t('bankAccounts.subtitle')}</p>
+          <h2 className="text-lg font-semibold text-foreground">{t('bankAccounts.title')}</h2>
+          <p className="mt-1 text-sm text-muted-foreground">{t('bankAccounts.subtitle')}</p>
         </div>
         {!showForm && (
           <button
             onClick={() => setShowForm(true)}
-            className="shrink-0 rounded-lg bg-sky-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-sky-700"
+            className="shrink-0 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-accent"
           >
             + {t('bankAccounts.addAccount')}
           </button>
@@ -96,8 +96,8 @@ export function TabBankAccounts({ bankAccounts, token, onChanged }: Props) {
 
       {/* Add form */}
       {showForm && (
-        <div className="mb-6 rounded-xl border border-sky-200 bg-sky-50 p-5">
-          <h3 className="mb-4 text-sm font-semibold text-gray-900">{t('bankAccounts.addAccount')}</h3>
+        <div className="mb-6 rounded-xl border border-primary/20 bg-secondary p-5">
+          <h3 className="mb-4 text-sm font-semibold text-foreground">{t('bankAccounts.addAccount')}</h3>
           <form
             onSubmit={handleSubmit((d) => addMutation.mutate(d))}
             className="space-y-4"
@@ -159,7 +159,7 @@ export function TabBankAccounts({ bankAccounts, token, onChanged }: Props) {
               <button
                 type="submit"
                 disabled={addMutation.isPending}
-                className="rounded-lg bg-sky-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-sky-700 disabled:opacity-60"
+                className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-accent disabled:opacity-60"
               >
                 {addMutation.isPending ? t('bankAccounts.saving') : t('bankAccounts.save')}
               </button>
@@ -167,7 +167,7 @@ export function TabBankAccounts({ bankAccounts, token, onChanged }: Props) {
                 type="button"
                 onClick={() => { reset(); setShowForm(false) }}
                 disabled={addMutation.isPending}
-                className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition-colors hover:bg-gray-50"
+                className="rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium text-foreground shadow-sm transition-colors hover:bg-muted"
               >
                 {t('bankAccounts.cancel')}
               </button>
@@ -178,27 +178,27 @@ export function TabBankAccounts({ bankAccounts, token, onChanged }: Props) {
 
       {/* Account list */}
       {bankAccounts.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-gray-300 py-12 text-center">
-          <p className="text-sm font-medium text-gray-500">{t('bankAccounts.noAccounts')}</p>
-          <p className="mt-1 text-xs text-gray-400">{t('bankAccounts.noAccountsHint')}</p>
+        <div className="rounded-xl border border-dashed border-border py-12 text-center">
+          <p className="text-sm font-medium text-muted-foreground">{t('bankAccounts.noAccounts')}</p>
+          <p className="mt-1 text-xs text-muted-foreground">{t('bankAccounts.noAccountsHint')}</p>
         </div>
       ) : (
         <ul className="space-y-3">
           {bankAccounts.map((acc) => (
             <li
               key={acc.id}
-              className="flex items-center justify-between rounded-xl border border-gray-200 bg-white px-5 py-4"
+              className="flex items-center justify-between rounded-xl border border-border bg-card px-5 py-4"
             >
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-semibold text-gray-900">{acc.bankName}</span>
+                  <span className="text-sm font-semibold text-foreground">{acc.bankName}</span>
                   {acc.isPrimary && (
-                    <span className="rounded-full bg-sky-100 px-2 py-0.5 text-xs font-medium text-sky-700">
+                    <span className="rounded-full bg-secondary px-2 py-0.5 text-xs font-medium text-primary">
                       {t('bankAccounts.primary')}
                     </span>
                   )}
                 </div>
-                <p className="mt-0.5 text-sm text-gray-500">
+                <p className="mt-0.5 text-sm text-muted-foreground">
                   {acc.accountNumber} · {acc.accountHolderName}
                 </p>
               </div>

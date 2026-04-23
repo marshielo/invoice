@@ -11,8 +11,8 @@ import { INVOICE_NUMBER_FORMATS, PAYMENT_TERMS_OPTIONS } from '@invoicein/shared
 import type { SettingsData } from '@/lib/types'
 
 const inputCls =
-  'mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm placeholder:text-gray-400 focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 disabled:bg-gray-50'
-const labelCls = 'block text-sm font-medium text-gray-700'
+  'mt-1 block w-full rounded-lg border border-border px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring disabled:bg-muted'
+const labelCls = 'block text-sm font-medium text-foreground'
 const errorCls = 'mt-1 text-xs text-red-600'
 
 const schema = z.object({
@@ -88,8 +88,8 @@ export function TabInvoiceSettings({ settings, token, onSaved }: Props) {
   return (
     <div className="max-w-2xl">
       <div className="mb-6">
-        <h2 className="text-lg font-semibold text-gray-900">{t('invoiceSettings.title')}</h2>
-        <p className="mt-1 text-sm text-gray-500">{t('invoiceSettings.subtitle')}</p>
+        <h2 className="text-lg font-semibold text-foreground">{t('invoiceSettings.title')}</h2>
+        <p className="mt-1 text-sm text-muted-foreground">{t('invoiceSettings.subtitle')}</p>
       </div>
 
       {banner === 'saved' && (
@@ -106,8 +106,8 @@ export function TabInvoiceSettings({ settings, token, onSaved }: Props) {
         className="space-y-6"
       >
         {/* Invoice numbering */}
-        <section className="rounded-xl border border-gray-200 p-5">
-          <h3 className="mb-4 text-sm font-semibold text-gray-800">
+        <section className="rounded-xl border border-border p-5">
+          <h3 className="mb-4 text-sm font-semibold text-foreground">
             {t('invoiceSettings.invoicePrefix')} &amp; {t('invoiceSettings.invoiceFormat')}
           </h3>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -134,9 +134,9 @@ export function TabInvoiceSettings({ settings, token, onSaved }: Props) {
               </select>
             </div>
             <div className="sm:col-span-2">
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-muted-foreground">
                 {t('invoiceSettings.preview')}:{' '}
-                <span className="font-mono font-semibold text-sky-700">
+                <span className="font-mono font-semibold text-primary">
                   {previewNumber(watchedPrefix, watchedFormat)}
                 </span>
               </p>
@@ -145,8 +145,8 @@ export function TabInvoiceSettings({ settings, token, onSaved }: Props) {
         </section>
 
         {/* Other prefixes */}
-        <section className="rounded-xl border border-gray-200 p-5">
-          <h3 className="mb-4 text-sm font-semibold text-gray-800">
+        <section className="rounded-xl border border-border p-5">
+          <h3 className="mb-4 text-sm font-semibold text-foreground">
             {t('invoiceSettings.quotationPrefix')} / {t('invoiceSettings.creditNotePrefix')}
           </h3>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -172,8 +172,8 @@ export function TabInvoiceSettings({ settings, token, onSaved }: Props) {
         </section>
 
         {/* Payment terms + PPN */}
-        <section className="rounded-xl border border-gray-200 p-5">
-          <h3 className="mb-4 text-sm font-semibold text-gray-800">
+        <section className="rounded-xl border border-border p-5">
+          <h3 className="mb-4 text-sm font-semibold text-foreground">
             {t('invoiceSettings.defaultPaymentTerms')} &amp; {t('invoiceSettings.ppnEnabled')}
           </h3>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -192,11 +192,11 @@ export function TabInvoiceSettings({ settings, token, onSaved }: Props) {
               </select>
             </div>
             <div className="flex flex-col justify-end gap-2">
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+              <label className="flex items-center gap-2 text-sm font-medium text-foreground">
                 <input
                   {...register('ppnEnabled')}
                   type="checkbox"
-                  className="h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-500"
+                  className="h-4 w-4 rounded border-border text-primary focus:ring-ring"
                   disabled={mutation.isPending}
                 />
                 {t('invoiceSettings.ppnEnabled')}
@@ -215,15 +215,15 @@ export function TabInvoiceSettings({ settings, token, onSaved }: Props) {
         </section>
 
         {/* Default notes / terms */}
-        <section className="rounded-xl border border-gray-200 p-5">
-          <h3 className="mb-4 text-sm font-semibold text-gray-800">
+        <section className="rounded-xl border border-border p-5">
+          <h3 className="mb-4 text-sm font-semibold text-foreground">
             {t('invoiceSettings.defaultNotes')} &amp; {t('invoiceSettings.defaultTerms')}
           </h3>
           <div className="space-y-4">
             <div>
               <label className={labelCls}>
                 {t('invoiceSettings.defaultNotes')}{' '}
-                <span className="text-xs font-normal text-gray-400">
+                <span className="text-xs font-normal text-muted-foreground">
                   ({t('invoiceSettings.defaultNotesHint')})
                 </span>
               </label>
@@ -237,7 +237,7 @@ export function TabInvoiceSettings({ settings, token, onSaved }: Props) {
             <div>
               <label className={labelCls}>
                 {t('invoiceSettings.defaultTerms')}{' '}
-                <span className="text-xs font-normal text-gray-400">
+                <span className="text-xs font-normal text-muted-foreground">
                   ({t('invoiceSettings.defaultTermsHint')})
                 </span>
               </label>
@@ -255,7 +255,7 @@ export function TabInvoiceSettings({ settings, token, onSaved }: Props) {
           <button
             type="submit"
             disabled={mutation.isPending || !isDirty}
-            className="rounded-lg bg-sky-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-sky-700 disabled:cursor-not-allowed disabled:opacity-60"
+            className="rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-accent disabled:cursor-not-allowed disabled:opacity-60"
           >
             {mutation.isPending ? t('invoiceSettings.saving') : t('invoiceSettings.save')}
           </button>

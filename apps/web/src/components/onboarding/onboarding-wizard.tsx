@@ -73,8 +73,8 @@ type InvoicePrefsForm = z.infer<typeof invoicePrefsSchema>
 // ─── Shared input styles ─────────────────────────────────────────────────────
 
 const inputCls =
-  'mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm placeholder:text-gray-400 focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 disabled:bg-gray-50'
-const labelCls = 'block text-sm font-medium text-gray-700'
+  'mt-1 block w-full rounded-lg border border-border px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring disabled:bg-muted'
+const labelCls = 'block text-sm font-medium text-foreground'
 const errorCls = 'mt-1 text-xs text-red-600'
 
 // ─── Step indicator ───────────────────────────────────────────────────────────
@@ -96,10 +96,10 @@ function StepIndicator({
               <div
                 className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold transition-colors ${
                   state === 'done'
-                    ? 'bg-sky-600 text-white'
+                    ? 'bg-primary text-white'
                     : state === 'active'
-                      ? 'bg-sky-600 text-white ring-4 ring-sky-100'
-                      : 'bg-gray-200 text-gray-500'
+                      ? 'bg-primary text-white ring-4 ring-primary/20'
+                      : 'bg-muted text-muted-foreground'
                 }`}
               >
                 {state === 'done' ? (
@@ -111,14 +111,14 @@ function StepIndicator({
                 )}
               </div>
               <span
-                className={`hidden text-xs sm:block ${state === 'active' ? 'font-semibold text-sky-700' : 'text-gray-400'}`}
+                className={`hidden text-xs sm:block ${state === 'active' ? 'font-semibold text-primary' : 'text-muted-foreground'}`}
               >
                 {label}
               </span>
             </div>
             {i < labels.length - 1 && (
               <div
-                className={`mb-4 h-0.5 flex-1 transition-colors ${i < currentStep ? 'bg-sky-600' : 'bg-gray-200'}`}
+                className={`mb-4 h-0.5 flex-1 transition-colors ${i < currentStep ? 'bg-primary' : 'bg-border'}`}
               />
             )}
           </li>
@@ -140,10 +140,10 @@ function Card({
   children: React.ReactNode
 }) {
   return (
-    <div className="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-gray-200">
+    <div className="rounded-2xl bg-card p-8 shadow-sm ring-1 ring-border">
       <div className="mb-6">
-        <h2 className="text-xl font-bold text-gray-900">{title}</h2>
-        <p className="mt-1 text-sm text-gray-500">{subtitle}</p>
+        <h2 className="text-xl font-bold text-foreground">{title}</h2>
+        <p className="mt-1 text-sm text-muted-foreground">{subtitle}</p>
       </div>
       {children}
     </div>
@@ -238,19 +238,19 @@ function StepBusinessInfo({
           <label htmlFor="slug" className={labelCls}>
             {t('businessInfo.slug')} <span className="text-red-500">*</span>
           </label>
-          <div className="mt-1 flex rounded-lg shadow-sm ring-1 ring-gray-300 focus-within:ring-2 focus-within:ring-sky-500">
-            <span className="flex items-center rounded-l-lg border-r border-gray-300 bg-gray-50 px-3 text-xs text-gray-400 select-none">
+          <div className="mt-1 flex rounded-lg shadow-sm ring-1 ring-border focus-within:ring-2 focus-within:ring-ring">
+            <span className="flex items-center rounded-l-lg border-r border-border bg-muted px-3 text-xs text-muted-foreground select-none">
               {t('businessInfo.slugPrefix')}
             </span>
             <input
               {...register('slug')}
               id="slug"
-              className="block flex-1 rounded-r-lg border-0 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none disabled:bg-gray-50"
+              className="block flex-1 rounded-r-lg border-0 bg-transparent px-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none disabled:bg-muted"
               placeholder="toko-maju-jaya"
               disabled={mutation.isPending}
             />
           </div>
-          <p className="mt-1 text-xs text-gray-400">{t('businessInfo.slugHint')}</p>
+          <p className="mt-1 text-xs text-muted-foreground">{t('businessInfo.slugHint')}</p>
           {errors.slug && (
             <p className={errorCls}>
               {errors.slug.type === 'too_small'
@@ -306,7 +306,7 @@ function StepBusinessInfo({
         <div>
           <label htmlFor="phone" className={labelCls}>
             {t('businessInfo.phone')}{' '}
-            <span className="text-xs font-normal text-gray-400">({t('businessInfo.phoneHint')})</span>
+            <span className="text-xs font-normal text-muted-foreground">({t('businessInfo.phoneHint')})</span>
           </label>
           <input
             {...register('phone')}
@@ -321,7 +321,7 @@ function StepBusinessInfo({
         <button
           type="submit"
           disabled={mutation.isPending}
-          className="mt-2 w-full rounded-lg bg-sky-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-sky-700 disabled:cursor-not-allowed disabled:opacity-60"
+          className="mt-2 w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-accent disabled:cursor-not-allowed disabled:opacity-60"
         >
           {mutation.isPending ? '...' : t('businessInfo.continue')}
         </button>
@@ -433,7 +433,7 @@ function StepBankAccount({
           <button
             type="submit"
             disabled={mutation.isPending}
-            className="w-full rounded-lg bg-sky-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-sky-700 disabled:cursor-not-allowed disabled:opacity-60"
+            className="w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-accent disabled:cursor-not-allowed disabled:opacity-60"
           >
             {mutation.isPending ? '...' : t('bankAccount.continue')}
           </button>
@@ -441,7 +441,7 @@ function StepBankAccount({
             type="button"
             onClick={onSkip}
             disabled={mutation.isPending}
-            className="w-full rounded-lg px-4 py-2 text-sm font-medium text-gray-500 transition-colors hover:text-gray-700"
+            className="w-full rounded-lg px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
           >
             {t('bankAccount.skip')}
           </button>
@@ -507,7 +507,7 @@ function StepLogo({
         onDrop={handleDrop}
         onDragOver={(e) => e.preventDefault()}
         onClick={() => fileInputRef.current?.click()}
-        className="relative flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-300 bg-gray-50 p-8 text-center transition-colors hover:border-sky-400 hover:bg-sky-50"
+        className="relative flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-border bg-muted p-8 text-center transition-colors hover:border-primary hover:bg-secondary"
       >
         {preview ? (
           <img
@@ -516,16 +516,16 @@ function StepLogo({
             className="mb-3 h-24 w-24 rounded-lg object-contain"
           />
         ) : (
-          <div className="mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-sky-100">
-            <svg className="h-8 w-8 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-secondary">
+            <svg className="h-8 w-8 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
           </div>
         )}
-        <p className="text-sm font-medium text-gray-600">
+        <p className="text-sm font-medium text-muted-foreground">
           {preview ? t('logo.changeFile') : t('logo.dropzone')}
         </p>
-        <p className="mt-1 text-xs text-gray-400">{t('logo.hint')}</p>
+        <p className="mt-1 text-xs text-muted-foreground">{t('logo.hint')}</p>
         <input
           ref={fileInputRef}
           type="file"
@@ -540,7 +540,7 @@ function StepLogo({
           type="button"
           onClick={() => { setApiError(null); mutation.mutate() }}
           disabled={!file || mutation.isPending}
-          className="w-full rounded-lg bg-sky-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-sky-700 disabled:cursor-not-allowed disabled:opacity-60"
+          className="w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-accent disabled:cursor-not-allowed disabled:opacity-60"
         >
           {mutation.isPending ? t('logo.uploading') : t('logo.continue')}
         </button>
@@ -548,7 +548,7 @@ function StepLogo({
           type="button"
           onClick={onSkip}
           disabled={mutation.isPending}
-          className="w-full rounded-lg px-4 py-2 text-sm font-medium text-gray-500 transition-colors hover:text-gray-700"
+          className="w-full rounded-lg px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
         >
           {t('logo.skip')}
         </button>
@@ -664,7 +664,7 @@ function StepInvoicePrefs({
         <div>
           <label htmlFor="defaultNotes" className={labelCls}>
             {t('invoicePrefs.notes')}{' '}
-            <span className="text-xs font-normal text-gray-400">
+            <span className="text-xs font-normal text-muted-foreground">
               ({t('invoicePrefs.notesHint')})
             </span>
           </label>
@@ -682,7 +682,7 @@ function StepInvoicePrefs({
           <button
             type="submit"
             disabled={mutation.isPending}
-            className="w-full rounded-lg bg-sky-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-sky-700 disabled:cursor-not-allowed disabled:opacity-60"
+            className="w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-accent disabled:cursor-not-allowed disabled:opacity-60"
           >
             {mutation.isPending ? '...' : t('invoicePrefs.finish')}
           </button>
@@ -690,7 +690,7 @@ function StepInvoicePrefs({
             type="button"
             onClick={onSkip}
             disabled={mutation.isPending}
-            className="w-full rounded-lg px-4 py-2 text-sm font-medium text-gray-500 transition-colors hover:text-gray-700"
+            className="w-full rounded-lg px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
           >
             {t('invoicePrefs.skip')}
           </button>
@@ -727,8 +727,8 @@ export function OnboardingWizard() {
     <div>
       {/* Header */}
       <div className="mb-6 text-center">
-        <h1 className="text-2xl font-bold text-gray-900">{t('title')}</h1>
-        <p className="mt-1 text-sm text-gray-500">{t('subtitle')}</p>
+        <h1 className="font-display text-2xl font-bold text-foreground">{t('title')}</h1>
+        <p className="mt-1 text-sm text-muted-foreground">{t('subtitle')}</p>
       </div>
 
       {/* Step indicator */}

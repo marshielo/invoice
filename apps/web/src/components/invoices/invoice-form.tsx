@@ -77,7 +77,7 @@ function ItemRow({
   const rowSubtotal = qty * price
   const rowTax = rowSubtotal * taxRate / 100
 
-  const cellInput = 'block w-full rounded-lg border border-gray-300 px-2 py-1.5 text-sm focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500'
+  const cellInput = 'block w-full rounded-lg border border-border px-2 py-1.5 text-sm focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring'
 
   return (
     <tr className="align-top">
@@ -127,13 +127,13 @@ function ItemRow({
         />
       </td>
       {/* Subtotal */}
-      <td className="p-2 w-32 text-right text-sm font-medium text-gray-700 align-middle">
+      <td className="p-2 w-32 text-right text-sm font-medium text-foreground align-middle">
         {formatRupiah(rowSubtotal + rowTax)}
       </td>
       {/* Delete */}
       <td className="p-2 w-8 text-center align-middle">
         {canRemove && (
-          <button type="button" onClick={onRemove} className="text-gray-400 hover:text-red-500 text-lg leading-none">
+          <button type="button" onClick={onRemove} className="text-muted-foreground hover:text-red-500 text-lg leading-none">
             ×
           </button>
         )}
@@ -310,22 +310,22 @@ export default function InvoiceForm({ invoiceId, initialData }: Props) {
     [productsData, setValue],
   )
 
-  const inputCls = 'mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm placeholder:text-gray-400 focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500'
-  const labelCls = 'block text-sm font-medium text-gray-700'
+  const inputCls = 'mt-1 block w-full rounded-lg border border-border px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring'
+  const labelCls = 'block text-sm font-medium text-foreground'
   const errorCls = 'mt-1 text-xs text-red-600'
 
   return (
     <div className="mx-auto max-w-5xl">
       <div className="mb-6 flex items-center gap-4">
-        <button type="button" onClick={() => router.back()} className="text-sm text-gray-500 hover:text-gray-700">← Kembali</button>
-        <h1 className="text-2xl font-bold text-gray-900">{isEdit ? 'Ubah Invoice' : 'Buat Invoice Baru'}</h1>
+        <button type="button" onClick={() => router.back()} className="text-sm text-muted-foreground hover:text-foreground">← Kembali</button>
+        <h1 className="font-display text-2xl font-bold text-foreground">{isEdit ? 'Ubah Invoice' : 'Buat Invoice Baru'}</h1>
       </div>
 
       <form onSubmit={onSubmit} className="space-y-6">
 
         {/* Header card */}
-        <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-          <h2 className="mb-4 text-xs font-semibold uppercase tracking-wider text-gray-500">Informasi Invoice</h2>
+        <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
+          <h2 className="mb-4 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Informasi Invoice</h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <label className={labelCls}>Pelanggan</label>
@@ -356,13 +356,13 @@ export default function InvoiceForm({ invoiceId, initialData }: Props) {
         </div>
 
         {/* Line items */}
-        <div className="rounded-xl border border-gray-200 bg-white shadow-sm">
-          <div className="border-b border-gray-200 px-6 py-4">
-            <h2 className="text-xs font-semibold uppercase tracking-wider text-gray-500">Item / Layanan</h2>
+        <div className="rounded-xl border border-border bg-card shadow-sm">
+          <div className="border-b border-border px-6 py-4">
+            <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Item / Layanan</h2>
           </div>
           <div className="overflow-x-auto">
             <table className="min-w-full">
-              <thead className="bg-gray-50 text-xs font-medium text-gray-500">
+              <thead className="bg-muted text-xs font-medium text-muted-foreground">
                 <tr>
                   <th className="px-4 py-2 text-left">Produk</th>
                   <th className="px-4 py-2 text-left">Deskripsi *</th>
@@ -374,7 +374,7 @@ export default function InvoiceForm({ invoiceId, initialData }: Props) {
                   <th className="px-4 py-2" />
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-border">
                 {fields.map((field, idx) => (
                   <ItemRow
                     key={field.id}
@@ -396,11 +396,11 @@ export default function InvoiceForm({ invoiceId, initialData }: Props) {
               </tbody>
             </table>
           </div>
-          <div className="border-t border-gray-100 px-6 py-3">
+          <div className="border-t border-border px-6 py-3">
             <button
               type="button"
               onClick={() => append({ product_id: null, description: '', quantity: 1, unit: '', unit_price: 0, tax_rate: 0 })}
-              className="text-sm text-sky-600 hover:text-sky-800"
+              className="text-sm text-primary hover:text-accent"
             >
               + Tambah baris
             </button>
@@ -409,11 +409,11 @@ export default function InvoiceForm({ invoiceId, initialData }: Props) {
 
         {/* Notes + Terms */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+          <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
             <label className={labelCls}>Catatan</label>
             <textarea {...register('notes')} rows={3} placeholder="Catatan untuk pelanggan..." className={inputCls} />
           </div>
-          <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+          <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
             <label className={labelCls}>Syarat & Ketentuan</label>
             <textarea {...register('terms')} rows={3} placeholder="Syarat pembayaran..." className={inputCls} />
           </div>
@@ -421,21 +421,21 @@ export default function InvoiceForm({ invoiceId, initialData }: Props) {
 
         {/* Totals */}
         <div className="flex justify-end">
-          <div className="w-72 space-y-2 rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-            <div className="flex justify-between text-sm text-gray-600">
+          <div className="w-72 space-y-2 rounded-xl border border-border bg-card p-6 shadow-sm">
+            <div className="flex justify-between text-sm text-muted-foreground">
               <span>Subtotal</span><span>{formatRupiah(subtotal)}</span>
             </div>
             {discount > 0 && (
-              <div className="flex justify-between text-sm text-gray-600">
+              <div className="flex justify-between text-sm text-muted-foreground">
                 <span>Diskon</span><span className="text-red-600">-{formatRupiah(discount)}</span>
               </div>
             )}
             {taxTotal > 0 && (
-              <div className="flex justify-between text-sm text-gray-600">
+              <div className="flex justify-between text-sm text-muted-foreground">
                 <span>Pajak</span><span>{formatRupiah(taxTotal)}</span>
               </div>
             )}
-            <div className="flex justify-between border-t border-gray-200 pt-2 text-base font-bold text-gray-900">
+            <div className="flex justify-between border-t border-border pt-2 text-base font-bold text-foreground">
               <span>Total</span><span>{formatRupiah(total)}</span>
             </div>
           </div>
@@ -450,15 +450,15 @@ export default function InvoiceForm({ invoiceId, initialData }: Props) {
         {/* Actions */}
         <div className="flex items-center justify-end gap-3 pb-8">
           <button type="button" onClick={() => router.back()}
-            className="rounded-lg border border-gray-300 px-5 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50">
+            className="rounded-lg border border-border px-5 py-2.5 text-sm font-medium text-foreground hover:bg-muted">
             Batal
           </button>
           <button type="submit" onClick={() => setSubmitAction('draft')} disabled={mutation.isPending}
-            className="rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-60">
+            className="rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground hover:bg-muted disabled:opacity-60">
             {mutation.isPending && submitAction === 'draft' ? 'Menyimpan...' : 'Simpan Draft'}
           </button>
           <button type="submit" onClick={() => setSubmitAction('send')} disabled={mutation.isPending}
-            className="rounded-lg bg-sky-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-sky-700 disabled:opacity-60">
+            className="rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-white hover:bg-accent disabled:opacity-60">
             {mutation.isPending && submitAction === 'send' ? 'Mengirim...' : 'Kirim Invoice'}
           </button>
         </div>

@@ -99,19 +99,19 @@ export default function ProductForm({ token, product, onClose, onSaved }: Props)
   const onSubmit = handleSubmit((values) => mutation.mutate(values))
 
   const inputCls =
-    'mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm placeholder:text-gray-400 focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500'
-  const labelCls = 'block text-sm font-medium text-gray-700'
+    'mt-1 block w-full rounded-lg border border-border px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring'
+  const labelCls = 'block text-sm font-medium text-foreground'
   const errorCls = 'mt-1 text-xs text-red-600'
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-      <div className="w-full max-w-lg rounded-xl bg-white shadow-xl">
+      <div className="w-full max-w-lg rounded-xl bg-card shadow-xl">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
-          <h2 className="text-lg font-semibold text-gray-900">
+        <div className="flex items-center justify-between border-b border-border px-6 py-4">
+          <h2 className="text-lg font-semibold text-foreground">
             {isEdit ? 'Ubah Produk' : 'Tambah Produk'}
           </h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-xl leading-none">✕</button>
+          <button onClick={onClose} className="text-muted-foreground hover:text-foreground text-xl leading-none">✕</button>
         </div>
 
         {/* Body */}
@@ -133,9 +133,9 @@ export default function ProductForm({ token, product, onClose, onSaved }: Props)
                     type="radio"
                     value={type}
                     {...register('product_type')}
-                    className="h-4 w-4 text-sky-600"
+                    className="h-4 w-4 text-primary"
                   />
-                  <span className="text-sm text-gray-700">
+                  <span className="text-sm text-foreground">
                     {type === 'product' ? 'Produk Fisik' : 'Layanan / Jasa'}
                   </span>
                 </label>
@@ -170,16 +170,16 @@ export default function ProductForm({ token, product, onClose, onSaved }: Props)
           </div>
 
           {/* Active toggle */}
-          <div className="flex items-center justify-between rounded-lg border border-gray-200 px-4 py-3">
+          <div className="flex items-center justify-between rounded-lg border border-border px-4 py-3">
             <div>
-              <p className="text-sm font-medium text-gray-900">Produk Aktif</p>
-              <p className="text-xs text-gray-500">Produk nonaktif tidak muncul saat membuat tagihan</p>
+              <p className="text-sm font-medium text-foreground">Produk Aktif</p>
+              <p className="text-xs text-muted-foreground">Produk nonaktif tidak muncul saat membuat tagihan</p>
             </div>
             <button
               type="button"
               onClick={() => setValue('is_active', !isActive)}
-              className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 ${
-                isActive ? 'bg-sky-600' : 'bg-gray-200'
+              className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ${
+                isActive ? 'bg-primary' : 'bg-muted-foreground/30'
               }`}
             >
               <span
@@ -198,11 +198,11 @@ export default function ProductForm({ token, product, onClose, onSaved }: Props)
         </form>
 
         {/* Footer */}
-        <div className="flex gap-3 border-t border-gray-200 px-6 py-4">
+        <div className="flex gap-3 border-t border-border px-6 py-4">
           <button
             type="button"
             onClick={onClose}
-            className="flex-1 rounded-lg border border-gray-300 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+            className="flex-1 rounded-lg border border-border py-2 text-sm font-medium text-foreground hover:bg-muted"
           >
             Batal
           </button>
@@ -210,7 +210,7 @@ export default function ProductForm({ token, product, onClose, onSaved }: Props)
             type="submit"
             onClick={onSubmit}
             disabled={mutation.isPending}
-            className="flex-1 rounded-lg bg-sky-600 py-2 text-sm font-medium text-white hover:bg-sky-700 disabled:opacity-60"
+            className="flex-1 rounded-lg bg-primary py-2 text-sm font-medium text-white hover:bg-accent disabled:opacity-60"
           >
             {mutation.isPending ? 'Menyimpan...' : isEdit ? 'Simpan Perubahan' : 'Tambah Produk'}
           </button>
