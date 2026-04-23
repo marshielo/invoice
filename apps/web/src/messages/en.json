@@ -37,7 +37,8 @@
     "expenses": "Expenses",
     "reports": "Reports",
     "settings": "Settings",
-    "billing": "Billing"
+    "billing": "Billing",
+    "signOut": "Sign Out"
   },
   "auth": {
     "login": "Sign In",

@@ -37,7 +37,8 @@
     "expenses": "Pengeluaran",
     "reports": "Laporan",
     "settings": "Pengaturan",
-    "billing": "Langganan"
+    "billing": "Langganan",
+    "signOut": "Keluar"
   },
   "auth": {
     "login": "Masuk",
