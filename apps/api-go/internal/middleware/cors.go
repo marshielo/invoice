@@ -14,6 +14,7 @@ func CORSMiddleware() gin.HandlerFunc {
 		"http://localhost:3001",
 		"https://invoicein.id",
 		"https://app.invoicein.id",
+		"https://invoice-web-qhy3.vercel.app",
 	}
 
 	return cors.New(cors.Config{
