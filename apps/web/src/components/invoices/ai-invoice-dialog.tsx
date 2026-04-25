@@ -82,7 +82,7 @@ function ItemRow({
   const rowTotal = qty * price * (1 + taxRate / 100)
 
   const cellCls =
-    'block w-full rounded border border-gray-300 px-2 py-1 text-xs focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500'
+    'block w-full rounded border border-border px-2 py-1 text-xs focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring'
 
   return (
     <tr className="align-top">
@@ -113,12 +113,12 @@ function ItemRow({
           className={`${cellCls} text-right`}
         />
       </td>
-      <td className="px-3 py-1.5 text-right text-xs font-medium text-gray-700 align-middle">
+      <td className="px-3 py-1.5 text-right text-xs font-medium text-foreground align-middle">
         {formatRupiah(rowTotal)}
       </td>
       <td className="px-3 py-1.5 text-center align-middle">
         {canRemove && (
-          <button type="button" onClick={onRemove} className="text-gray-400 hover:text-red-500 text-base leading-none">
+          <button type="button" onClick={onRemove} className="text-muted-foreground hover:text-red-500 text-base leading-none">
             ×
           </button>
         )}
@@ -263,22 +263,22 @@ export default function AIInvoiceDialog({ onClose }: Props) {
   const onSubmit = handleSubmit((values) => confirmMutation.mutate(values))
 
   const inputCls =
-    'block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500'
+    'block w-full rounded-lg border border-border px-3 py-2 text-sm focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring'
 
   return (
     <div
       className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/50 p-4"
       onClick={(e) => { if (e.target === e.currentTarget) onClose() }}
     >
-      <div className="relative my-8 w-full max-w-3xl rounded-xl bg-white shadow-2xl">
+      <div className="relative my-8 w-full max-w-3xl rounded-xl bg-card shadow-2xl">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
-          <h2 className="text-lg font-semibold text-gray-900">
+        <div className="flex items-center justify-between border-b border-border px-6 py-4">
+          <h2 className="text-lg font-semibold text-foreground">
             {step === 1 ? '✨ Buat Invoice dengan AI' : '✨ Preview Invoice'}
           </h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 text-xl leading-none"
+            className="text-muted-foreground hover:text-foreground text-xl leading-none"
             aria-label="Tutup"
           >
             ×
@@ -288,7 +288,7 @@ export default function AIInvoiceDialog({ onClose }: Props) {
         {/* ── Step 1: Prompt Input ────────────────────────────────────────── */}
         {step === 1 && (
           <div className="p-6">
-            <p className="mb-3 text-sm text-gray-600">
+            <p className="mb-3 text-sm text-muted-foreground">
               Deskripsikan invoice Anda dalam bahasa Indonesia atau Inggris. Claude akan mengurai
               pelanggan, item, harga, dan jatuh tempo secara otomatis.
             </p>
@@ -307,7 +307,7 @@ export default function AIInvoiceDialog({ onClose }: Props) {
                 }
               }}
             />
-            <p className="mt-1 text-xs text-gray-400">Ctrl+Enter untuk generate</p>
+            <p className="mt-1 text-xs text-muted-foreground">Ctrl+Enter untuk generate</p>
 
             {generateError && (
               <p className="mt-3 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">
@@ -319,7 +319,7 @@ export default function AIInvoiceDialog({ onClose }: Props) {
               <button
                 type="button"
                 onClick={onClose}
-                className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                className="rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium text-foreground hover:bg-muted"
               >
                 Batal
               </button>
@@ -330,7 +330,7 @@ export default function AIInvoiceDialog({ onClose }: Props) {
                   generateMutation.mutate()
                 }}
                 disabled={generateMutation.isPending || prompt.trim().length < 10}
-                className="rounded-lg bg-sky-600 px-4 py-2 text-sm font-medium text-white hover:bg-sky-700 disabled:opacity-60"
+                className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-accent disabled:opacity-60"
               >
                 {generateMutation.isPending ? 'Claude sedang memproses...' : 'Generate ✨'}
               </button>
@@ -343,16 +343,16 @@ export default function AIInvoiceDialog({ onClose }: Props) {
           <form onSubmit={onSubmit} className="p-6 space-y-4">
             {/* AI explanation */}
             {explanation && (
-              <div className="rounded-lg border border-sky-200 bg-sky-50 px-4 py-3">
-                <p className="mb-1 text-xs font-semibold text-sky-700">Yang Claude pahami:</p>
-                <p className="text-sm text-sky-900">{explanation}</p>
+              <div className="rounded-lg border border-border bg-secondary px-4 py-3">
+                <p className="mb-1 text-xs font-semibold text-primary">Yang Claude pahami:</p>
+                <p className="text-sm text-foreground">{explanation}</p>
               </div>
             )}
 
             {/* Header fields */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="mb-1 block text-xs font-medium text-gray-700">Pelanggan</label>
+                <label className="mb-1 block text-xs font-medium text-foreground">Pelanggan</label>
                 <SearchableSelect
                   options={clientOptions}
                   value={watchedClientId}
@@ -362,7 +362,7 @@ export default function AIInvoiceDialog({ onClose }: Props) {
                 />
               </div>
               <div>
-                <label className="mb-1 block text-xs font-medium text-gray-700">
+                <label className="mb-1 block text-xs font-medium text-foreground">
                   Tanggal Terbit <span className="text-red-500">*</span>
                 </label>
                 <input {...register('issue_date')} type="date" className={inputCls} />
@@ -371,11 +371,11 @@ export default function AIInvoiceDialog({ onClose }: Props) {
                 )}
               </div>
               <div>
-                <label className="mb-1 block text-xs font-medium text-gray-700">Jatuh Tempo</label>
+                <label className="mb-1 block text-xs font-medium text-foreground">Jatuh Tempo</label>
                 <input {...register('due_date')} type="date" className={inputCls} />
               </div>
               <div>
-                <label className="mb-1 block text-xs font-medium text-gray-700">Diskon (Rp)</label>
+                <label className="mb-1 block text-xs font-medium text-foreground">Diskon (Rp)</label>
                 <input
                   {...register('discount_amount')}
                   type="number" min={0} step={1000} placeholder="0"
@@ -385,13 +385,13 @@ export default function AIInvoiceDialog({ onClose }: Props) {
             </div>
 
             {/* Items table */}
-            <div className="overflow-hidden rounded-lg border border-gray-200">
-              <div className="border-b border-gray-200 bg-gray-50 px-4 py-2">
-                <span className="text-xs font-semibold uppercase tracking-wider text-gray-500">Item / Layanan</span>
+            <div className="overflow-hidden rounded-lg border border-border">
+              <div className="border-b border-border bg-muted px-4 py-2">
+                <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Item / Layanan</span>
               </div>
               <div className="overflow-x-auto">
                 <table className="min-w-full">
-                  <thead className="bg-gray-50 text-xs text-gray-500">
+                  <thead className="bg-muted text-xs text-muted-foreground">
                     <tr>
                       <th className="px-3 py-2 text-left">Deskripsi *</th>
                       <th className="px-3 py-2 text-right">Qty</th>
@@ -402,7 +402,7 @@ export default function AIInvoiceDialog({ onClose }: Props) {
                       <th className="px-3 py-2" />
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-100">
+                  <tbody className="divide-y divide-border">
                     {fields.map((field, idx) => (
                       <ItemRow
                         key={field.id}
@@ -416,13 +416,13 @@ export default function AIInvoiceDialog({ onClose }: Props) {
                   </tbody>
                 </table>
               </div>
-              <div className="border-t border-gray-100 px-4 py-2">
+              <div className="border-t border-border px-4 py-2">
                 <button
                   type="button"
                   onClick={() =>
                     append({ product_id: null, description: '', quantity: 1, unit: '', unit_price: 0, tax_rate: 0 })
                   }
-                  className="text-xs text-sky-600 hover:text-sky-800"
+                  className="text-xs text-primary hover:text-accent"
                 >
                   + Tambah baris
                 </button>
@@ -432,23 +432,23 @@ export default function AIInvoiceDialog({ onClose }: Props) {
             {/* Live totals */}
             <div className="flex justify-end">
               <div className="w-64 space-y-1 text-sm">
-                <div className="flex justify-between text-gray-600">
+                <div className="flex justify-between text-muted-foreground">
                   <span>Subtotal</span>
                   <span>{formatRupiah(subtotal)}</span>
                 </div>
                 {discount > 0 && (
-                  <div className="flex justify-between text-gray-600">
+                  <div className="flex justify-between text-muted-foreground">
                     <span>Diskon</span>
                     <span className="text-red-600">-{formatRupiah(discount)}</span>
                   </div>
                 )}
                 {taxTotal > 0 && (
-                  <div className="flex justify-between text-gray-600">
+                  <div className="flex justify-between text-muted-foreground">
                     <span>Pajak</span>
                     <span>{formatRupiah(taxTotal)}</span>
                   </div>
                 )}
-                <div className="flex justify-between border-t border-gray-200 pt-1 font-bold text-gray-900">
+                <div className="flex justify-between border-t border-border pt-1 font-bold text-foreground">
                   <span>Total</span>
                   <span>{formatRupiah(total)}</span>
                 </div>
@@ -458,11 +458,11 @@ export default function AIInvoiceDialog({ onClose }: Props) {
             {/* Notes / Terms */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="mb-1 block text-xs font-medium text-gray-700">Catatan</label>
+                <label className="mb-1 block text-xs font-medium text-foreground">Catatan</label>
                 <textarea {...register('notes')} rows={2} className={`${inputCls} resize-none`} />
               </div>
               <div>
-                <label className="mb-1 block text-xs font-medium text-gray-700">Syarat & Ketentuan</label>
+                <label className="mb-1 block text-xs font-medium text-foreground">Syarat & Ketentuan</label>
                 <textarea {...register('terms')} rows={2} className={`${inputCls} resize-none`} />
               </div>
             </div>
@@ -474,11 +474,11 @@ export default function AIInvoiceDialog({ onClose }: Props) {
             )}
 
             {/* Actions */}
-            <div className="flex items-center justify-between border-t border-gray-100 pt-4">
+            <div className="flex items-center justify-between border-t border-border pt-4">
               <button
                 type="button"
                 onClick={() => setStep(1)}
-                className="text-sm text-gray-500 hover:text-gray-700"
+                className="text-sm text-muted-foreground hover:text-foreground"
               >
                 ← Ubah Prompt
               </button>
@@ -486,14 +486,14 @@ export default function AIInvoiceDialog({ onClose }: Props) {
                 <button
                   type="button"
                   onClick={onClose}
-                  className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                  className="rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium text-foreground hover:bg-muted"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
                   disabled={confirmMutation.isPending}
-                  className="rounded-lg bg-sky-600 px-4 py-2 text-sm font-medium text-white hover:bg-sky-700 disabled:opacity-60"
+                  className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-accent disabled:opacity-60"
                 >
                   {confirmMutation.isPending ? 'Membuat...' : 'Konfirmasi & Buat Invoice'}
                 </button>

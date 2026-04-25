@@ -102,10 +102,10 @@ export const STATUS_LABELS: Record<InvoiceStatus, string> = {
 }
 
 export const STATUS_COLORS: Record<InvoiceStatus, string> = {
-  draft: 'bg-gray-100 text-gray-700',
+  draft: 'bg-muted text-foreground',
   sent: 'bg-blue-100 text-blue-700',
   partial: 'bg-yellow-100 text-yellow-800',
   paid: 'bg-green-100 text-green-800',
   overdue: 'bg-red-100 text-red-700',
-  cancelled: 'bg-gray-100 text-gray-500',
+  cancelled: 'bg-muted text-muted-foreground',
 }

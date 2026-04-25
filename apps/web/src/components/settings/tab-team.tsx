@@ -11,8 +11,8 @@ import { PLAN_LIMITS } from '@invoicein/shared/constants'
 import type { ApiResponse, UsersListData } from '@/lib/types'
 
 const inputCls =
-  'mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm placeholder:text-gray-400 focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 disabled:bg-gray-50'
-const labelCls = 'block text-sm font-medium text-gray-700'
+  'mt-1 block w-full rounded-lg border border-border px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring disabled:bg-muted'
+const labelCls = 'block text-sm font-medium text-foreground'
 const errorCls = 'mt-1 text-xs text-red-600'
 
 const ROLES = ['admin', 'staff', 'viewer'] as const
@@ -26,14 +26,14 @@ type InviteForm = z.infer<typeof inviteSchema>
 
 const ROLE_BADGE: Record<string, string> = {
   owner: 'bg-purple-100 text-purple-700',
-  admin: 'bg-sky-100 text-sky-700',
+  admin: 'bg-secondary text-primary',
   staff: 'bg-green-100 text-green-700',
-  viewer: 'bg-gray-100 text-gray-600',
+  viewer: 'bg-muted text-muted-foreground',
 }
 
 const STATUS_BADGE: Record<string, string> = {
   active: 'bg-green-100 text-green-700',
-  inactive: 'bg-gray-100 text-gray-500',
+  inactive: 'bg-muted text-muted-foreground',
   pending: 'bg-yellow-100 text-yellow-700',
 }
 
@@ -118,13 +118,13 @@ export function TabTeam({ plan, token }: Props) {
     <div className="max-w-2xl">
       <div className="mb-6 flex items-start justify-between">
         <div>
-          <h2 className="text-lg font-semibold text-gray-900">{t('team.title')}</h2>
-          <p className="mt-1 text-sm text-gray-500">{t('team.subtitle')}</p>
+          <h2 className="text-lg font-semibold text-foreground">{t('team.title')}</h2>
+          <p className="mt-1 text-sm text-muted-foreground">{t('team.subtitle')}</p>
         </div>
         {!showInvite && (
           <button
             onClick={() => setShowInvite(true)}
-            className="shrink-0 rounded-lg bg-sky-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-sky-700"
+            className="shrink-0 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition-colors hover:bg-accent"
           >
             + {t('team.invite')}
           </button>
@@ -132,8 +132,8 @@ export function TabTeam({ plan, token }: Props) {
       </div>
 
       {/* Plan limit badge */}
-      <div className="mb-5 inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-gray-50 px-3 py-1 text-xs text-gray-600">
-        <span className="h-1.5 w-1.5 rounded-full bg-sky-500" />
+      <div className="mb-5 inline-flex items-center gap-1.5 rounded-full border border-border bg-muted px-3 py-1 text-xs text-muted-foreground">
+        <span className="h-1.5 w-1.5 rounded-full bg-primary" />
         {isUnlimited
           ? t('team.planUnlimited', { current: currentCount, plan })
           : t('team.planLimit', { current: currentCount, max: maxUsers, plan })}
@@ -145,8 +145,8 @@ export function TabTeam({ plan, token }: Props) {
 
       {/* Invite form */}
       {showInvite && (
-        <div className="mb-6 rounded-xl border border-sky-200 bg-sky-50 p-5">
-          <h3 className="mb-4 text-sm font-semibold text-gray-900">{t('team.invite')}</h3>
+        <div className="mb-6 rounded-xl border border-border bg-secondary p-5">
+          <h3 className="mb-4 text-sm font-semibold text-foreground">{t('team.invite')}</h3>
           <form
             onSubmit={handleSubmit((d) => { setActionError(null); inviteMutation.mutate(d) })}
             className="space-y-4"
@@ -190,7 +190,7 @@ export function TabTeam({ plan, token }: Props) {
               <button
                 type="submit"
                 disabled={inviteMutation.isPending}
-                className="rounded-lg bg-sky-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-sky-700 disabled:opacity-60"
+                className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition-colors hover:bg-accent disabled:opacity-60"
               >
                 {inviteMutation.isPending ? t('team.sending') : t('team.sendInvite')}
               </button>
@@ -198,7 +198,7 @@ export function TabTeam({ plan, token }: Props) {
                 type="button"
                 onClick={() => { reset(); setShowInvite(false) }}
                 disabled={inviteMutation.isPending}
-                className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition-colors hover:bg-gray-50"
+                className="rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium text-foreground shadow-sm transition-colors hover:bg-muted"
               >
                 {t('team.cancelInvite')}
               </button>
@@ -209,10 +209,10 @@ export function TabTeam({ plan, token }: Props) {
 
       {/* Member list */}
       {isLoading ? (
-        <div className="py-8 text-center text-sm text-gray-400">Loading...</div>
+        <div className="py-8 text-center text-sm text-muted-foreground">Loading...</div>
       ) : !data?.users.length ? (
-        <div className="rounded-xl border border-dashed border-gray-300 py-12 text-center">
-          <p className="text-sm text-gray-500">No team members yet</p>
+        <div className="rounded-xl border border-dashed border-border py-12 text-center">
+          <p className="text-sm text-muted-foreground">No team members yet</p>
         </div>
       ) : (
         <ul className="space-y-2">
@@ -222,15 +222,15 @@ export function TabTeam({ plan, token }: Props) {
             return (
               <li
                 key={user.id}
-                className="flex items-center justify-between rounded-xl border border-gray-200 bg-white px-5 py-4"
+                className="flex items-center justify-between rounded-xl border border-border bg-card px-5 py-4"
               >
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
-                    <span className="truncate text-sm font-medium text-gray-900">
+                    <span className="truncate text-sm font-medium text-foreground">
                       {user.fullName ?? user.email}
                     </span>
                     <span
-                      className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-medium ${ROLE_BADGE[user.role] ?? 'bg-gray-100 text-gray-600'}`}
+                      className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-medium ${ROLE_BADGE[user.role] ?? 'bg-muted text-muted-foreground'}`}
                     >
                       {t(`team.roles.${user.role as 'owner' | 'admin' | 'staff' | 'viewer'}`)}
                     </span>
@@ -240,7 +240,7 @@ export function TabTeam({ plan, token }: Props) {
                       {t(`team.${status}`)}
                     </span>
                   </div>
-                  <p className="mt-0.5 truncate text-xs text-gray-400">{user.email}</p>
+                  <p className="mt-0.5 truncate text-xs text-muted-foreground">{user.email}</p>
                 </div>
 
                 {!isOwner && user.isActive && (
@@ -251,7 +251,7 @@ export function TabTeam({ plan, token }: Props) {
                         updateRoleMutation.mutate({ userId: user.id, role: e.target.value })
                       }
                       disabled={updateRoleMutation.isPending}
-                      className="rounded-lg border border-gray-300 px-2 py-1 text-xs text-gray-700 focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 disabled:opacity-60"
+                      className="rounded-lg border border-border px-2 py-1 text-xs text-foreground focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring disabled:opacity-60"
                     >
                       {ROLES.map((r) => (
                         <option key={r} value={r}>

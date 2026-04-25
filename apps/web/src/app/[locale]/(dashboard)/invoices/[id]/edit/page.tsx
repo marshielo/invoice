@@ -23,7 +23,7 @@ export default function Page({ params }: Props) {
   })
 
   if (isLoading) {
-    return <div className="p-8 text-center text-sm text-gray-500">Memuat...</div>
+    return <div className="p-8 text-center text-sm text-muted-foreground">Memuat...</div>
   }
 
   return <InvoiceForm invoiceId={id} initialData={data?.data ?? null} />
