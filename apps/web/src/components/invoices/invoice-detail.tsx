@@ -155,6 +155,29 @@ export default function InvoiceDetail({ invoiceId }: { invoiceId: string }) {
     onError: () => setActionError('Gagal membuat link pembayaran.'),
   })
 
+  const generatePdfMutation = useMutation({
+    mutationFn: () =>
+      apiClient.post<{ success: boolean; data: { pdf_url: string } }>(
+        `/api/v1/invoices/${invoiceId}/pdf`,
+        {},
+        token ?? undefined,
+      ),
+    onSuccess: (res) => {
+      const url = res.data?.pdf_url
+      if (url) window.open(url, '_blank')
+      qc.invalidateQueries({ queryKey: ['invoice', invoiceId] })
+    },
+    onError: () => setActionError('Gagal membuat PDF. Coba lagi.'),
+  })
+
+  const handlePdf = () => {
+    if (inv?.pdfUrl) {
+      window.open(inv.pdfUrl, '_blank')
+    } else {
+      generatePdfMutation.mutate()
+    }
+  }
+
   const handleCopyLink = () => {
     if (!paymentLink) return
     void navigator.clipboard.writeText(paymentLink.redirectUrl)
@@ -232,16 +255,13 @@ export default function InvoiceDetail({ invoiceId }: { invoiceId: string }) {
               {whatsappMutation.isPending ? 'Mengirim...' : '💬 WhatsApp'}
             </button>
           )}
-          {inv.pdfUrl && (
-            <a
-              href={inv.pdfUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground hover:bg-muted"
-            >
-              ↓ PDF
-            </a>
-          )}
+          <button
+            onClick={handlePdf}
+            disabled={generatePdfMutation.isPending}
+            className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground hover:bg-muted disabled:opacity-60"
+          >
+            {generatePdfMutation.isPending ? 'Membuat PDF...' : '↓ PDF'}
+          </button>
         </div>
       </div>
 
